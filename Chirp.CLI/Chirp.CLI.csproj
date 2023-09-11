@@ -7,4 +7,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
+
+    <ProjectReference Include="..\SimpleDB\SimpleDB.csproj">
+        <Name>SimpleDB</Name>
+    </ProjectReference>
+  </ItemGroup>
+
 </Project>
