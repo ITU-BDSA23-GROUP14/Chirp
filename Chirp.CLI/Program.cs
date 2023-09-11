@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography.X509Certificates;
 
+using SimpleDB;
 
 if (args[0] == "read") PrintChirps();    
 else if (args[0] == "cheep" && args.Length == 2) AddChirp();
@@ -16,12 +17,13 @@ void AddChirp()
     string path = @"chirp_cli_db.csv";
     string username = Environment.UserName;
     long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    Cheep cheep = new Cheep(username, args[1], currentTime);
     
-    using (StreamWriter sw = File.AppendText(path))
-        {
-            sw.WriteLine();
-            sw.Write($"{username},\"{args[1]}\",{currentTime}");
-        }
+    //IDatabaseRepository<T> csvh = new CsvHandler<Cheep>("");
+
+    CsvHandler<Cheep> csvh = new CsvHandler<Cheep>(path);
+
+    csvh.Store(cheep);
 }
 
 void PrintChirps()
