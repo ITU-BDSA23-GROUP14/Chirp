@@ -1,11 +1,71 @@
 {
   "version": 3,
   "targets": {
-    "net7.0": {}
+    "net7.0": {
+      "CsvHelper/30.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/CsvHelper.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/CsvHelper.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SimpleDB/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "CsvHelper": "30.0.1"
+        },
+        "compile": {
+          "bin/placeholder/SimpleDB.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SimpleDB.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "CsvHelper/30.0.1": {
+      "sha512": "rcZtgbWR+As4G3Vpgx0AMNmShGuQLFjkHAPIIflzrfkJCx8/AOd4m96ZRmiU1Wi39qS5UVjV0P8qdgqOo5Cwyg==",
+      "type": "package",
+      "path": "csvhelper/30.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "csvhelper.30.0.1.nupkg.sha512",
+        "csvhelper.nuspec",
+        "lib/net45/CsvHelper.dll",
+        "lib/net45/CsvHelper.xml",
+        "lib/net47/CsvHelper.dll",
+        "lib/net47/CsvHelper.xml",
+        "lib/net5.0/CsvHelper.dll",
+        "lib/net5.0/CsvHelper.xml",
+        "lib/net6.0/CsvHelper.dll",
+        "lib/net6.0/CsvHelper.xml",
+        "lib/netstandard2.0/CsvHelper.dll",
+        "lib/netstandard2.0/CsvHelper.xml",
+        "lib/netstandard2.1/CsvHelper.dll",
+        "lib/netstandard2.1/CsvHelper.xml"
+      ]
+    },
+    "SimpleDB/1.0.0": {
+      "type": "project",
+      "path": "../SimpleDB/SimpleDB.csproj",
+      "msbuildProject": "../SimpleDB/SimpleDB.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net7.0": []
+    "net7.0": [
+      "CsvHelper >= 30.0.1",
+      "SimpleDB >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\marku\\.nuget\\packages\\": {},
@@ -14,11 +74,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\marku\\OneDrive - ITU\\7. semester\\BDSA\\Chirp\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
+      "projectUniqueName": "c:\\Users\\marku\\OneDrive - ITU\\7. semester\\BDSA\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
       "projectName": "Chirp.CLI",
-      "projectPath": "C:\\Users\\marku\\OneDrive - ITU\\7. semester\\BDSA\\Chirp\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
+      "projectPath": "c:\\Users\\marku\\OneDrive - ITU\\7. semester\\BDSA\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
       "packagesPath": "C:\\Users\\marku\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\marku\\OneDrive - ITU\\7. semester\\BDSA\\Chirp\\Chirp\\Chirp.CLI\\obj\\",
+      "outputPath": "c:\\Users\\marku\\OneDrive - ITU\\7. semester\\BDSA\\Chirp\\Chirp.CLI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -38,7 +98,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "c:\\Users\\marku\\OneDrive - ITU\\7. semester\\BDSA\\Chirp\\SimpleDB\\SimpleDB.csproj": {
+              "projectPath": "c:\\Users\\marku\\OneDrive - ITU\\7. semester\\BDSA\\Chirp\\SimpleDB\\SimpleDB.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -50,6 +114,12 @@
     "frameworks": {
       "net7.0": {
         "targetAlias": "net7.0",
+        "dependencies": {
+          "CsvHelper": {
+            "target": "Package",
+            "version": "[30.0.1, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
