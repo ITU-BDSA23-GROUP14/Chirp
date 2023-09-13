@@ -13,6 +13,10 @@ using SimpleDB;
 string path = @"chirp_cli_db.csv";
 IDatabaseRepository<Cheep> csvh = new CSVDatabase<Cheep>(path);
 
+/* The following code using System.CommandLine is inspired by "Tutorial: Get started with System.CommandLine" from Microsoft
+    Link: https://learn.microsoft.com/en-us/dotnet/standard/commandline/get-started-tutorial
+*/
+
 var r = new RootCommand();                                          // base of System.CommandLine that we attach commands to
 
 var readCommand = new Command("read", "Read a Cheep!");
