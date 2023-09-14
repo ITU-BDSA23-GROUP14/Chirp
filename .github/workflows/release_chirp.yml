@@ -32,9 +32,9 @@ jobs:
 
       - name: Publish Executables
         run: |
-          dotnet publish -c Release -o publish/Chirp-Win --runtime win-x64
-          dotnet publish -c Release -o publish/Chirp-OSX --runtime osx-x64
-          dotnet publish -c Release -o publish/Chirp-Linux --runtime linux-x64
+          dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true
+          dotnet publish -c Release -r osx-x64 --self-contained false /p:PublishSingleFile=true
+          dotnet publish -c Release -r linux-x64 --self-contained false /p:PublishSingleFile=true
           
       - name: Create ZIP Files
         run: |
