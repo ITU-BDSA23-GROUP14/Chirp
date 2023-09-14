@@ -1,0 +1,54 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET Release Chirp
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+
+      - name: Publish Executables
+        run: |
+          dotnet publish -r win-x64 -c Release -o publish/Chirp-Win
+          dotnet publish -r osx-x64 -c Release -o publish/Chirp-OSX
+          dotnet publish -r linux-x64 -c Release -o publish/Chirp-Linux
+
+      - name: Create ZIP Files
+        run: |
+          cd publish
+          zip -r Chirp-Win.zip Chirp-Win
+          zip -r Chirp-OSX.zip Chirp-OSX
+          zip -r Chirp-Linux.zip Chirp-Linux
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            chirp-win-x64.zip
+            chirp-osx-x64.zip
+            chirp-linux-x64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
