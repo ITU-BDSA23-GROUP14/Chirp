@@ -38,9 +38,9 @@ jobs:
           
       - name: Create ZIP Files
         run: |
-          zip -r Chirp-Win.zip SimpleDB/bin/Debug/net7.0/win-x64/publish/ Chirp.CLI/bin/Debug/net7.0/win-x64/publish/
-          zip -r Chirp-OSX.zip SimpleDB/bin/Debug/net7.0/osx-x64/publish/ Chirp.CLI/bin/Debug/net7.0/osx-x64/publish/
-          zip -r Chirp-Linux.zip SimpleDB/bin/Debug/net7.0/linux-x64/publish/ Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/
+          zip -r Chirp-Win.zip SimpleDB/bin/Release/net7.0/win-x64/publish/ Chirp.CLI/bin/Release/net7.0/win-x64/publish/
+          zip -r Chirp-OSX.zip SimpleDB/bin/Release/net7.0/osx-x64/publish/ Chirp.CLI/bin/Release/net7.0/osx-x64/publish/
+          zip -r Chirp-Linux.zip SimpleDB/bin/Release/net7.0/linux-x64/publish/ Chirp.CLI/bin/Release/net7.0/linux-x64/publish/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
