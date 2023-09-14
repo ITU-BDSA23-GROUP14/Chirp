@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
 
@@ -32,10 +32,10 @@ jobs:
 
       - name: Publish Executables
         run: |
-          dotnet publish -r win-x64 -c Release -o publish/Chirp-Win
-          dotnet publish -r osx-x64 -c Release -o publish/Chirp-OSX
-          dotnet publish -r linux-x64 -c Release -o publish/Chirp-Linux
-
+          dotnet publish -c Release -o publish/Chirp-Win --runtime win-x64
+          dotnet publish -c Release -o publish/Chirp-OSX --runtime osx-x64
+          dotnet publish -c Release -o publish/Chirp-Linux --runtime linux-x64
+          
       - name: Create ZIP Files
         run: |
           cd publish
