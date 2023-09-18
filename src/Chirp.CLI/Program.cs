@@ -10,7 +10,7 @@ using System.CommandLine;
 
 using SimpleDB;
 
-string path = @"chirp_cli_db.csv";
+string path = @"../../data/chirp.csv";
 IDatabaseRepository<Cheep> csvh = new CSVDatabase<Cheep>(path);
 
 /* The following code using System.CommandLine is inspired by "Tutorial: Get started with System.CommandLine" from Microsoft

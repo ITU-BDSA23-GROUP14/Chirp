@@ -1,0 +1,1 @@
+namespace Chirp.CLI.Client.Tests;
