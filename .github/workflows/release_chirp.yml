@@ -38,7 +38,7 @@ jobs:
           dotnet publish Chirp.CLI/Chirp.CLI.csproj --runtime win-x64 -c Release -o "$release_name" --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
           
           # Path to the executable to include
-          executable_path="./${release_name}/Chirp.CLI"
+          executable_path="./${release_name}/Chirp.CLI.exe"
           
           # Pack to zip for Windows
           7z a -tzip "${release_name}.zip" "$executable_path"
