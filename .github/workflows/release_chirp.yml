@@ -35,10 +35,13 @@ jobs:
           release_name="Chirp-$tag-win-x64"
 
           # Build everything
-          dotnet publish Chirp.CLI/Chirp.CLI.csproj --runtime win-x64 -c Release -o "$release_name"
+          dotnet publish Chirp.CLI/Chirp.CLI.csproj --runtime win-x64 -c Release -o "$release_name" --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
+          
+          # Path to the executable to include
+          executable_path="./${release_name}/Chirp.CLI"
           
           # Pack to zip for Windows
-          7z a -tzip "${release_name}.zip" "./${release_name}/*"
+          7z a -tzip "${release_name}.zip" "$executable_path"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
