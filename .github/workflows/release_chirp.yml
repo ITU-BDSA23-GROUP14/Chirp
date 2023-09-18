@@ -32,16 +32,12 @@ jobs:
 
       - name: Publish Executables
         run: |
-          dotnet publish -c Release -r win-x64 --self-contained true
-          dotnet publish -c Release -r osx-x64 --self-contained true
-          dotnet publish -c Release -r linux-x64 --self-contained true
-          mv SimpleDB/bin/Release/net7.0/win-x64/publish/SimpleDB.exe Chirp.CLI/bin/Release/net7.0/win-x64/publish/Chirp.CLI.exe
-          mv SimpleDB/bin/Release/net7.0/osx-x64/publish/SimpleDB Chirp.CLI/bin/Release/net7.0/osx-x64/publish/Chirp.CLI
-          mv SimpleDB/bin/Release/net7.0/linux-x64/publish/SimpleDB Chirp.CLI/bin/Release/net7.0/linux-x64/publish/Chirp.CLI
+          dotnet publish -c Release -r win-x64 --self-contained true -o Chirp.CLI/bin/Release/net7.0/win-x64/publish
+          dotnet publish -c Release -r osx-x64 --self-contained true -o Chirp.CLI/bin/Release/net7.0/osx-x64/publish
+          dotnet publish -c Release -r linux-x64 --self-contained true -o Chirp.CLI/bin/Release/net7.0/linux-x64/publish
 
       - name: Create ZIP Files
         run: |
-          # Zip the Windows, macOS, and Linux executables separately
           cd Chirp.CLI/bin/Release/net7.0/win-x64/publish
           zip -r Chirp-Win.zip .
 
