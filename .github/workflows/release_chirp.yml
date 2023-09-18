@@ -35,8 +35,8 @@ jobs:
           release_name="Chirp-$tag-win-x64"
 
           # Build everything
-          dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --runtime win-x64 -c Release -o "$release_name"
-
+          dotnet publish Chirp.CLI/Chirp.CLI.csproj --runtime win-x64 -c Release -o "$release_name"
+          
           # Pack to zip for Windows
           7z a -tzip "${release_name}.zip" "./${release_name}/*"
 
