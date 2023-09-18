@@ -22,4 +22,14 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="chirps.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>  
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SimpleDB\SimpleDB.csproj" />
+  </ItemGroup>
+
 </Project>
