@@ -32,15 +32,24 @@ jobs:
 
       - name: Publish Executables
         run: |
-          dotnet publish -c Release -r win-x64 --self-contained false
-          dotnet publish -c Release -r osx-x64 --self-contained false
-          dotnet publish -c Release -r linux-x64 --self-contained false
-          
+          dotnet publish -c Release -r win-x64 --self-contained true
+          dotnet publish -c Release -r osx-x64 --self-contained true
+          dotnet publish -c Release -r linux-x64 --self-contained true
+          mv SimpleDB/bin/Release/net7.0/win-x64/publish/SimpleDB.exe Chirp.CLI/bin/Release/net7.0/win-x64/publish/Chirp.CLI.exe
+          mv SimpleDB/bin/Release/net7.0/osx-x64/publish/SimpleDB Chirp.CLI/bin/Release/net7.0/osx-x64/publish/Chirp.CLI
+          mv SimpleDB/bin/Release/net7.0/linux-x64/publish/SimpleDB Chirp.CLI/bin/Release/net7.0/linux-x64/publish/Chirp.CLI
+
       - name: Create ZIP Files
         run: |
-          zip -j Chirp-Win.zip SimpleDB/bin/Release/net7.0/win-x64/publish/SimpleDB.dll Chirp.CLI/bin/Release/net7.0/win-x64/publish/Chirp.CLI.dll
-          zip -j Chirp-OSX.zip SimpleDB/bin/Release/net7.0/osx-x64/publish/SimpleDB.dll Chirp.CLI/bin/Release/net7.0/osx-x64/publish/Chirp.CLI.dll
-          zip -j Chirp-Linux.zip SimpleDB/bin/Release/net7.0/linux-x64/publish/SimpleDB.dll Chirp.CLI/bin/Release/net7.0/linux-x64/publish/Chirp.CLI.dll
+          # Zip the Windows, macOS, and Linux executables separately
+          cd Chirp.CLI/bin/Release/net7.0/win-x64/publish
+          zip -r Chirp-Win.zip .
+
+          cd ../osx-x64/publish
+          zip -r Chirp-OSX.zip .
+
+          cd ../linux-x64/publish
+          zip -r Chirp-Linux.zip .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
