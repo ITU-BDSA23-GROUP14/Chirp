@@ -1,31 +1,50 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.5.002.0
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chirp.CLI", "Chirp.CLI\Chirp.CLI.csproj", "{6CEEA29B-5972-4D45-BBD4-B89AFD1886B3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{99622373-3B99-4851-BD9A-F8BDA375D45B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleDB", "SimpleDB\SimpleDB.csproj", "{FEF6A5A8-C01C-4C69-83C8-735AE0CC0530}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI", "src\Chirp.CLI\Chirp.CLI.csproj", "{4B12727B-CD93-4CF6-9935-E3F48FB29F02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDB", "src\SimpleDB\SimpleDB.csproj", "{3D305843-788B-40D2-BFD0-977371500BF0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{43D4D51B-9B8C-4A9C-B89D-171E7F1B6820}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CSVDB.Tests", "test\Chirp.CSVDB.Tests\Chirp.CSVDB.Tests.csproj", "{791AA619-BFB5-4B24-B2DB-34BA0798E3AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI.Client.Tests", "test\Chirp.CLI.Client.Tests\Chirp.CLI.Client.Tests.csproj", "{4B694E03-CECC-4393-A446-6BC5A5DE6C34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6CEEA29B-5972-4D45-BBD4-B89AFD1886B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6CEEA29B-5972-4D45-BBD4-B89AFD1886B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6CEEA29B-5972-4D45-BBD4-B89AFD1886B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6CEEA29B-5972-4D45-BBD4-B89AFD1886B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FEF6A5A8-C01C-4C69-83C8-735AE0CC0530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FEF6A5A8-C01C-4C69-83C8-735AE0CC0530}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FEF6A5A8-C01C-4C69-83C8-735AE0CC0530}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FEF6A5A8-C01C-4C69-83C8-735AE0CC0530}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {CC9A3BF4-C711-4A03-A983-B8AFB2355E06}
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4B12727B-CD93-4CF6-9935-E3F48FB29F02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B12727B-CD93-4CF6-9935-E3F48FB29F02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B12727B-CD93-4CF6-9935-E3F48FB29F02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B12727B-CD93-4CF6-9935-E3F48FB29F02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D305843-788B-40D2-BFD0-977371500BF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D305843-788B-40D2-BFD0-977371500BF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D305843-788B-40D2-BFD0-977371500BF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D305843-788B-40D2-BFD0-977371500BF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{791AA619-BFB5-4B24-B2DB-34BA0798E3AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{791AA619-BFB5-4B24-B2DB-34BA0798E3AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{791AA619-BFB5-4B24-B2DB-34BA0798E3AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{791AA619-BFB5-4B24-B2DB-34BA0798E3AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B694E03-CECC-4393-A446-6BC5A5DE6C34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B694E03-CECC-4393-A446-6BC5A5DE6C34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B694E03-CECC-4393-A446-6BC5A5DE6C34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B694E03-CECC-4393-A446-6BC5A5DE6C34}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4B12727B-CD93-4CF6-9935-E3F48FB29F02} = {99622373-3B99-4851-BD9A-F8BDA375D45B}
+		{3D305843-788B-40D2-BFD0-977371500BF0} = {99622373-3B99-4851-BD9A-F8BDA375D45B}
+		{791AA619-BFB5-4B24-B2DB-34BA0798E3AD} = {43D4D51B-9B8C-4A9C-B89D-171E7F1B6820}
+		{4B694E03-CECC-4393-A446-6BC5A5DE6C34} = {43D4D51B-9B8C-4A9C-B89D-171E7F1B6820}
 	EndGlobalSection
 EndGlobal

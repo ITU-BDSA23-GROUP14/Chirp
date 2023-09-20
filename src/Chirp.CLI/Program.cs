@@ -10,7 +10,7 @@ using System.CommandLine;
 
 using SimpleDB;
 
-string path = @"chirp_cli_db.csv";
+string path = @"data/chirps.csv";
 IDatabaseRepository<Cheep> csvh = new CSVDatabase<Cheep>(path);
 
 /* The following code using System.CommandLine is inspired by "Tutorial: Get started with System.CommandLine" from Microsoft
@@ -20,7 +20,8 @@ IDatabaseRepository<Cheep> csvh = new CSVDatabase<Cheep>(path);
 var r = new RootCommand();                                          // base of System.CommandLine that we attach commands to
 
 var readCommand = new Command("read", "Read a Cheep!");
-readCommand.SetHandler(() => {                                      // SetHandler handles what happens when we run the command
+readCommand.SetHandler(() =>
+{                                                                   // SetHandler handles what happens when we run the command
     UserInterface.PrintCheeps(csvh.Read());
 });
 
@@ -30,7 +31,8 @@ var writeArgument = new Argument<string>(
     description: "Your Cheep's text"
 );
 writeCommand.AddArgument(writeArgument);                            // writeArgument forces user to write smth (so "dotnet run -- cheep" on its own would be illegal/impossible)
-writeCommand.SetHandler((cheepText) => {
+writeCommand.SetHandler((cheepText) =>
+{
     AddChirp(cheepText);
 }, writeArgument);
 
@@ -43,7 +45,7 @@ void AddChirp(string cheepText)
 {
     string username = Environment.UserName;
     long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-    
+
     Cheep cheep = new Cheep(username, $"\"{cheepText}\"", currentTime);
     csvh.Store(cheep);
 }
