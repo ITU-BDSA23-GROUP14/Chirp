@@ -22,6 +22,14 @@
     </PackageReference>
   </ItemGroup>
 
+  <!-- Inspired by https://learn.microsoft.com/en-us/visualstudio/msbuild/copy-task?view=vs-2022 -->
+  <Target Name="MakeMyDir" AfterTargets="Build">
+    <Copy 
+      SourceFiles="$(OutDir)..\..\..\..\..\data\chirps.csv"
+      DestinationFolder="$(OutDir)data"
+    />
+ </Target>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\Chirp.CLI\Chirp.CLI.csproj" />
   </ItemGroup>
