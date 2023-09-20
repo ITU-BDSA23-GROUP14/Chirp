@@ -1,18 +1,10 @@
 namespace Chirp.CSVDB.Tests;
-using Xunit.Abstractions;
 using SimpleDB;
 
 record Cheep(string Author, string Message, long Timestamp);
 
 public class IntegrationTest
 {
-    private readonly ITestOutputHelper output;
-
-    public IntegrationTest(ITestOutputHelper output)
-    {
-        this.output = output;
-    }
-
     [Fact]
     public void ReadWriteTest()
     {
@@ -32,7 +24,6 @@ public class IntegrationTest
             }
             else
             {
-                output.WriteLine(temp2[i].Author);
                 Assert.True(temp2[i] == newCheep);
             }
         }

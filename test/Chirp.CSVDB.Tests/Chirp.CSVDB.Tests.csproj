@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="chirps.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>  
+    <Content Include="..\..\data\chirps.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>  
     </Content>
   </ItemGroup>
 
