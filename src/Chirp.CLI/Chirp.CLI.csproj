@@ -17,9 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\data\chirps.csv">
+    <Content Include="..\..\data\chirps.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
 
 </Project>
