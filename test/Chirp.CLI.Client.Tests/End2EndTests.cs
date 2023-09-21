@@ -19,10 +19,10 @@ public class End2EndTests
         // Inspired by https://stackoverflow.com/questions/285760/how-to-spawn-a-process-and-capture-its-stdout-in-net
         var processStartInfo = new ProcessStartInfo
         {
-            FileName = "Chirp.CLI.exe",
+            FileName = "dotnet",
             RedirectStandardOutput = true,
             UseShellExecute = false,
-            Arguments = "read"
+            Arguments = "Chirp.CLI.dll read"
         };
 
         var process = Process.Start(processStartInfo);
@@ -43,16 +43,16 @@ public class End2EndTests
     {
         var processStartInfo = new ProcessStartInfo
         {
-            FileName = "Chirp.CLI.exe",
+            FileName = "dotnet",
             RedirectStandardOutput = true,
             UseShellExecute = false,
-            Arguments = "cheep \"I love cookies\""
+            Arguments = "Chirp.CLI.dll cheep \"I love cookies\""
         };
 
         var process = Process.Start(processStartInfo);
         process?.WaitForExit();
 
-        processStartInfo.Arguments = "read";
+        processStartInfo.Arguments = "Chirp.CLI.dll read";
         process = Process.Start(processStartInfo);
         var processOutput = process?.StandardOutput.ReadToEnd();
         process?.WaitForExit();
