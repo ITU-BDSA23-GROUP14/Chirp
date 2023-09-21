@@ -7,11 +7,19 @@
     //The following is adapted from: https://joshclose.github.io/CsvHelper/getting-started/
     sealed public class CSVDatabase<T> : IDatabaseRepository<T>
     {
+        private static CSVDatabase<T> instance = null; 
         private string filePath;
 
-        public CSVDatabase(string filePath)
+        public static CSVDatabase Instance(string filePath)
         {
-            this.filePath = filePath;
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new CSVDatabase(filePath);
+                }
+                this.filePath = filePath;
+            }
         }
 
         public IEnumerable<T> Read(int? limit = null)
