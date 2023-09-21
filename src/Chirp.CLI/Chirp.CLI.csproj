@@ -14,10 +14,6 @@
     <ProjectReference Include="..\SimpleDB\SimpleDB.csproj">
         <Name>SimpleDB</Name>
     </ProjectReference>
-
-    <Content Include="..\..\data\**\*">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>
