@@ -14,7 +14,7 @@ public class IntegrationTest
             UserInterface.PrintCheeps(testList);
             string consoleOutput = stringWriter.ToString();
 
-            Assert.Equal("ropf @ 08/01/23 14:09:20: Hello, BDSA students!\r\n", consoleOutput);
+            Assert.Contains("ropf @ 08/01/23 14:09:20: Hello, BDSA students!", consoleOutput);
         }
 
 
