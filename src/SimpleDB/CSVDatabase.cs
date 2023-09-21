@@ -3,15 +3,24 @@
     using CsvHelper;
     using CsvHelper.Configuration;
     using System.Globalization;
-
-    //The following is adapted from: https://joshclose.github.io/CsvHelper/getting-started/
-    sealed public class CSVDatabase<T> : IDatabaseRepository<T>
+    
+    public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
+        private static CSVDatabase<T>? instance = null; 
         private string filePath;
 
-        public CSVDatabase(string filePath)
+        private CSVDatabase(string filePath)
         {
             this.filePath = filePath;
+        }
+
+        public static CSVDatabase<T> Instance(string filePath)
+        { 
+            if (instance == null)
+            {
+                instance = new CSVDatabase<T>(filePath);
+            }
+            return instance;
         }
 
         public IEnumerable<T> Read(int? limit = null)
