@@ -11,7 +11,7 @@ using System.CommandLine;
 using SimpleDB;
 
 string path = @"chirp_cli_db.csv";
-IDatabaseRepository<Cheep> csvh = new CSVDatabase<Cheep>(path);
+IDatabaseRepository<Cheep> csvh = CSVDatabase<Cheep>.Instance(path);
 
 /* The following code using System.CommandLine is inspired by "Tutorial: Get started with System.CommandLine" from Microsoft
     Link: https://learn.microsoft.com/en-us/dotnet/standard/commandline/get-started-tutorial

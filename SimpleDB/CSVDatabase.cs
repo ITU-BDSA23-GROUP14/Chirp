@@ -5,21 +5,23 @@
     using System.Globalization;
 
     //The following is adapted from: https://joshclose.github.io/CsvHelper/getting-started/
-    sealed public class CSVDatabase<T> : IDatabaseRepository<T>
+    public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
-        private static CSVDatabase<T> instance = null; 
+        private static CSVDatabase<T>? instance = null; 
         private string filePath;
 
-        public static CSVDatabase Instance(string filePath)
+        private CSVDatabase(string filePath)
         {
-            get
+            this.filePath = filePath;
+        }
+
+        public static CSVDatabase<T> Instance(string filePath)
+        { 
+            if (instance == null)
             {
-                if (instance == null)
-                {
-                    instance = new CSVDatabase(filePath);
-                }
-                this.filePath = filePath;
+                instance = new CSVDatabase<T>(filePath);
             }
+            return instance;
         }
 
         public IEnumerable<T> Read(int? limit = null)
