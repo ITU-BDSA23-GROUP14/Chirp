@@ -55,7 +55,7 @@ jobs:
           executable_path="./${release_name}/Chirp.CLI.exe"
           
           # Pack to zip for Linux
-          zip -r "${release_name}.zip" "$executable_path"
+          zip -r "${release_name}.zip" "$release_name"
 
       - name: Build for Mac
         run: |
@@ -69,7 +69,7 @@ jobs:
           executable_path="./${release_name}/Chirp.CLI.exe"
           
           # Pack to zip for Mac
-          zip -r "${release_name}.zip" "$executable_path"
+          zip -r "${release_name}.zip" "$release_name"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
