@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography.X509Certificates;
 using System.CommandLine;
-
+using CheepRecordType;
 using SimpleDB;
 
 string path = @"data/chirps.csv";
