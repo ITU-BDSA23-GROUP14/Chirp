@@ -1,8 +1,6 @@
 using CheepRecordType;
 using SimpleDB;
-using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
