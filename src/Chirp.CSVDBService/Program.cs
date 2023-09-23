@@ -14,7 +14,7 @@ app.MapGet("/cheeps", () => db.Read());
 app.MapPost("/cheep", (Cheep cheep) => { db.Store(cheep); });
 
 // Create an HTTP client object
-var baseURL = "http://localhost:5012";
+var baseURL = "http://localhost:5000";
 using HttpClient client = new();
 client.DefaultRequestHeaders.Accept.Clear();
 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
