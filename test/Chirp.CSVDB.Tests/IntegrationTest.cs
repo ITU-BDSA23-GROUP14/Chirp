@@ -1,31 +1,47 @@
-namespace Chirp.CSVDB.Tests;
+using System.Net.Http.Json;
 using SimpleDB;
+using System.Net.Http.Headers;
 
-record Cheep(string Author, string Message, long Timestamp);
-
-public class IntegrationTest
+namespace Chirp.CSVDB.Tests
 {
-    [Fact]
-    public void ReadWriteTest()
+    public class IntegrationTest //: IDisposable
     {
-        string path = @"chirps.csv";
-        IDatabaseRepository<Cheep> csvh = new CSVDatabase<Cheep>(path);
-        List<Cheep> temp = csvh.Read().ToList();
-
-        Cheep newCheep = new Cheep("me", "hello", 10);
-        csvh.Store(newCheep);
-        List<Cheep> temp2 = csvh.Read().ToList();
-
-        for (int i = 0; i < temp2.Count; i++)
+        [Fact]
+        public async void ReadTest()
         {
-            if (i < 4)
-            {
-                Assert.True(temp[i] == temp2[i]);
-            }
-            else
-            {
-                Assert.True(temp2[i] == newCheep);
-            }
+
+            var baseURL = "http://localhost:5000";
+            HttpClient client = new();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.BaseAddress = new Uri(baseURL);
+
+            var HTTPResponse = await client.GetAsync("cheeps");
+            var responseContent = await HTTPResponse.Content.ReadFromJsonAsync<IEnumerable<Cheep>>();
+            var responseCode = HTTPResponse.StatusCode;
+
+            Assert.Equal(System.Net.HttpStatusCode.OK, responseCode);
+            Assert.NotNull(responseContent);
+            Assert.Contains(responseContent, item => item is not null);
         }
+
+        [Fact]
+        public async void WriteTest()
+        {
+            var baseURL = "http://localhost:5000";
+            HttpClient client = new();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.BaseAddress = new Uri(baseURL);
+
+            Cheep? cheep = new("tester", "test cheep", 0);
+            
+            var HTTPResponse = await client.PostAsJsonAsync("cheep", cheep);
+            var responseCode = HTTPResponse.IsSuccessStatusCode;
+
+            Assert.Equal(true, responseCode);
+        }
+
+        record Cheep(string Author, string Message, long Timestamp);
     }
 }
