@@ -1,4 +1,5 @@
 namespace Chirp.CLI.Client.Tests;
+using CheepRecordType;
 
 public class IntegrationTest
 {
