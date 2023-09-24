@@ -18,6 +18,10 @@
 
   </ItemGroup>
 
-  
+  <ItemGroup>
+    <Content Include="..\..\data\chirps.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>  
+    </Content>
+  </ItemGroup>
 
 </Project>

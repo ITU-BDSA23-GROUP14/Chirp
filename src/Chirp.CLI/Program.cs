@@ -7,9 +7,6 @@ using CheepRecordType;
 using SimpleDB;
 using System.Net.Http.Json;
 
-string path = @"data/chirps.csv";
-IDatabaseRepository<Cheep> csvh = CSVDatabase<Cheep>.Instance(path);
-
 /* The following code using System.CommandLine is inspired by "Tutorial: Get started with System.CommandLine" from Microsoft
     Link: https://learn.microsoft.com/en-us/dotnet/standard/commandline/get-started-tutorial
 */
