@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - bdsagroup14chirpremot
 on:
   push:
     branches:
-      - 33-w4-1b-refactor-your-_chirp_-cli-client-to-use-the-csv-database-web-service
+      - 38-w4-2a-add-automatic-deployment-of-your-csv-database-web-service
   workflow_dispatch:
 
 jobs:
