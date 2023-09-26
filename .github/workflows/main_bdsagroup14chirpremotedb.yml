@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - bdsagroup14chirpremot
 on:
   push:
     branches:
-      - 38-w4-2a-add-automatic-deployment-of-your-csv-database-web-service
+      - main
   workflow_dispatch:
 
 jobs:
