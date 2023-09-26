@@ -1,10 +1,9 @@
 namespace Chirp.CLI.Client.Tests;
-using CheepRecordType;
 
 public class IntegrationTest
 {
     [Fact]
-    public void Test_UserInterface_PrintCheeps()
+    public void UserInterface_PrintCheeps_Test()
     {
         using (StringWriter stringWriter = new StringWriter())
         {
