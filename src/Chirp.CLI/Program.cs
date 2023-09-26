@@ -12,7 +12,7 @@ using System.Net.Http.Json;
 
 var r = new RootCommand();                                                      // base of System.CommandLine that we attach commands to
 
-var baseURL = "http://localhost:5000";
+var baseURL = "https://bdsagroup14chirpremotedb.azurewebsites.net/";
 using HttpClient client = new();
 client.BaseAddress = new Uri(baseURL);
 
