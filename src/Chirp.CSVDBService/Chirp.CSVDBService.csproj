@@ -12,24 +12,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />
-  
-    <ProjectReference Include="..\SimpleDB\SimpleDB.csproj">
-      <Name>SimpleDB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chirp.CLI\Chirp.CLI.csproj">
-      <Name>ChirpCLI</Name>
-    </ProjectReference>
-
   </ItemGroup>
-   
 
   <ItemGroup>
-    <Content Include="chirps.csv">
+     <Content Include="chirps.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>  
-    </Content>
+    </Content> 
   </ItemGroup>
 
 </Project>
