@@ -1,8 +1,10 @@
-﻿namespace SimpleDB
+﻿namespace CSVDatabase
 {
     using CsvHelper;
     using CsvHelper.Configuration;
+    using System;
     using System.Globalization;
+    using DatabaseInterface;
     
     public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
