@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - bdsagroup14chirpremot
 on:
   push:
     branches:
-      - 38-w4-2a-add-automatic-deployment-of-your-csv-database-web-service
+      - main
   workflow_dispatch:
 
 jobs:
@@ -24,10 +24,10 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build src/Chirp.CSVDBService/ --configuration Release
-  
+
       - name: dotnet publish
         run: dotnet publish src/Chirp.CSVDBService/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
-        
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'bdsagroup14chirpremotedb'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_98684DB5B3F14AE88E29A58D43ECFC13 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E817C5035BB44B7787A606937DCAA6D7 }}
           package: .

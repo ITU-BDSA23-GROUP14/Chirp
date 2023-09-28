@@ -3,7 +3,6 @@
 */
 
 using System.CommandLine;
-using CheepRecordType;
 using RemoteDatabase;
 
 /* The following code using System.CommandLine is inspired by "Tutorial: Get started with System.CommandLine" from Microsoft
@@ -12,9 +11,11 @@ using RemoteDatabase;
 
 var r = new RootCommand();                                                      // base of System.CommandLine that we attach commands to
 
-var baseURL = "http://localhost:5000";
+var baseURL = "https://bdsagroup14chirpremotedb.azurewebsites.net/";
 
 var db = RemoteDatabase<Cheep>.Instance(baseURL);
+using HttpClient client = new();
+client.BaseAddress = new Uri(baseURL);
 
 var readCommand = new Command("read", "Read a Cheep!");
 readCommand.SetHandler(() =>                                              // SetHandler handles what happens when we run the command
