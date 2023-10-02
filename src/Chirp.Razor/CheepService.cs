@@ -24,6 +24,7 @@ public class CheepService : ICheepService
 
     public List<CheepViewModel> GetCheeps()
     {
+        var _cheeps = DBFacade.GetCheeps();
         return _cheeps;
     }
 
