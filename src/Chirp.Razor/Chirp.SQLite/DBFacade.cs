@@ -23,13 +23,14 @@ public class DBFacade
     public List<CheepViewModel> GetCheeps(int pageNum)
     {
         var sqlQuery = @"
-            SELECT * 
-            FROM message 
-            ORDER by message.pub_date desc
+            SELECT m.text, u.username, m.pub_date 
+            FROM message m
+            JOIN user u ON m.author_id = u.user_id
+            ORDER by m.pub_date desc
             LIMIT 5
             OFFSET @pageNum * 5";
 
-        return QueryCheeps(sqlQuery);
+        return QueryCheeps(sqlQuery, new List<SqliteParameter> { new SqliteParameter("@pageNum", pageNum) });
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum)
@@ -43,10 +44,10 @@ public class DBFacade
             LIMIT 5
             OFFSET @pageNum * 5";
 
-        return QueryCheeps(sqlQuery, new SqliteParameter("@author", author));
+        return QueryCheeps(sqlQuery, new List<SqliteParameter> { new SqliteParameter("@author", author), new SqliteParameter("@pageNum", pageNum) });
     }
 
-    private List<CheepViewModel> QueryCheeps(string sqlQuery, SqliteParameter? parameter = null)
+    private List<CheepViewModel> QueryCheeps(string sqlQuery, List<SqliteParameter> parameters)
     {
         List<CheepViewModel> cheeps = new();
 
@@ -57,7 +58,7 @@ public class DBFacade
             var command = connection.CreateCommand();
             command.CommandText = sqlQuery;
 
-            if (parameter != null)
+            foreach (var parameter in parameters)
             {
                 command.Parameters.Add(parameter);
             }
@@ -66,8 +67,8 @@ public class DBFacade
             while (reader.Read())
             {
                 CheepViewModel cheep = new(
-                    reader.GetString(0),
                     reader.GetString(1),
+                    reader.GetString(0),
                     reader.GetString(2)
                 );
 
