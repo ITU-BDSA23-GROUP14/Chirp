@@ -29,15 +29,22 @@ public class CheepService : ICheepService
 
     public List<CheepViewModel> GetCheeps(int pageNum)
     {
-        if (pageNum == 0) {
+        if (pageNum == 0)
+        {
             pageNum = 1;
         }
         int startingCheep = (pageNum - 1) * 5;
 
-        if (_cheeps.Count >= startingCheep + 5) {
+        if (_cheeps.Count >= startingCheep + 5)
+        {
             return _cheeps.GetRange(startingCheep, 5);
         }
-        else {
+        else if (_cheeps.Count < startingCheep)
+        {
+            return _cheeps.GetRange(0, 5);
+        }
+        else
+        {
             return _cheeps.GetRange(startingCheep, _cheeps.Count - startingCheep);
         }
     }
