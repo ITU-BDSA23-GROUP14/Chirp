@@ -39,7 +39,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-
+    needs: build
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -55,7 +55,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: test
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
