@@ -1,14 +1,14 @@
 using Microsoft.Data.Sqlite;
-public record CheepViewModel(string Author, string Message, string Timestamp);
+using ViewModel;
 
 public class DBFacade
 {
     private readonly string sqlDBFilePath;
-        
+
     public DBFacade()
     {
         string? chirpDbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH");       // Attempt to get the database path from the environment variable
-        
+
         // If succesfullly located then use the path, otherwise create it
         if (string.IsNullOrEmpty(chirpDbPath))
         {
@@ -20,32 +20,36 @@ public class DBFacade
         }
     }
 
-    public List<CheepViewModel> GetCheeps()
+    public List<CheepViewModel> GetCheeps(int pageNum)
     {
         var sqlQuery = @"
             SELECT * 
             FROM message 
-            ORDER by message.pub_date desc";
-            
+            ORDER by message.pub_date desc
+            LIMIT 5
+            OFFSET @pageNum * 5";
+
         return QueryCheeps(sqlQuery);
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum)
     {
         var sqlQuery = @"
             SELECT m.text, u.username, m.pub_date
             FROM message m
             JOIN user u ON m.author_id = u.user_id
             WHERE u.username = @author
-            ORDER BY m.pub_date DESC";
-        
+            ORDER BY m.pub_date DESC
+            LIMIT 5
+            OFFSET @pageNum * 5";
+
         return QueryCheeps(sqlQuery, new SqliteParameter("@author", author));
     }
 
     private List<CheepViewModel> QueryCheeps(string sqlQuery, SqliteParameter? parameter = null)
     {
         List<CheepViewModel> cheeps = new();
-        
+
         using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}"))
         {
             connection.Open();
@@ -70,7 +74,7 @@ public class DBFacade
                 cheeps.Add(cheep);
             }
         }
-        
+
         return cheeps;
     }
 }
