@@ -11,12 +11,13 @@ public class PublicModel : PageModel
 
     public PublicModel(ICheepService service)
     {
+        Cheeps = new();
         _service = service;
     }
 
     public ActionResult OnGet(int pageNum)
     {
-        System.Console.WriteLine($"page is {pageNum}");
+        Console.WriteLine($"page is {pageNum}");
         Cheeps = _service.GetSelectCheeps(pageNum);
         return Page();
     }

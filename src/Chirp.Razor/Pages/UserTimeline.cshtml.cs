@@ -11,12 +11,13 @@ public class UserTimelineModel : PageModel
 
     public UserTimelineModel(ICheepService service)
     {
+        Cheeps = new();
         _service = service;
     }
 
     public ActionResult OnGet(string author, int pageNum)
     {
-        System.Console.WriteLine($"page is {pageNum}");
+        Console.WriteLine($"page is {pageNum}");
         Cheeps = _service.GetCheepsFromAuthor(author, pageNum);
         return Page();
     }
