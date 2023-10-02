@@ -3,7 +3,7 @@ using CSVDatabase;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-var db = CSVDatabase<Cheep>.Instance("../../data/chirps.csv");
+var db = CSVDatabase<Cheep>.Instance("chirps.csv");
 
 // This is your Web API
 app.MapGet("/cheeps", () => db.Read());

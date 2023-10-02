@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\data\chirps.csv">
+    <Content Include="chirps.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>  
     </Content>
   </ItemGroup>
