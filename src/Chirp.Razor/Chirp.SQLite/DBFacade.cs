@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.Data.Sqlite;
 using ViewModel;
 
@@ -12,7 +13,8 @@ public class DBFacade
         // If succesfullly located then use the path, otherwise create it
         if (string.IsNullOrEmpty(chirpDbPath))
         {
-            sqlDBFilePath = Path.Combine(Path.GetTempPath(), "chirp.db");
+            //sqlDBFilePath = Path.Combine(Path.GetTempPath(), "chirp.db");
+            sqlDBFilePath = "data/chirp.db";
         }
         else
         {
