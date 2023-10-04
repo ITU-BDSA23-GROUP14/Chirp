@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - bdsagroup14chirprazor
 on:
   push:
     branches:
-      - 49-w5-2b-add-automatic-deployment-of-razor-page-app
+      - main
   workflow_dispatch:
 
 jobs:
