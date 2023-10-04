@@ -1,14 +1,14 @@
 using Microsoft.Data.Sqlite;
-public record CheepViewModel(string Author, string Message, string Timestamp);
+using ViewModel;
 
 public class DBFacade
 {
     private readonly string sqlDBFilePath;
-        
+
     public DBFacade()
     {
         string? chirpDbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH");       // Attempt to get the database path from the environment variable
-        
+
         // If succesfullly located then use the path, otherwise create it
         if (string.IsNullOrEmpty(chirpDbPath))
         {
@@ -20,32 +20,37 @@ public class DBFacade
         }
     }
 
-    public List<CheepViewModel> GetCheeps()
+    public List<CheepViewModel> GetCheeps(int pageNum)
     {
         var sqlQuery = @"
-            SELECT * 
-            FROM message 
-            ORDER by message.pub_date desc";
-            
-        return QueryCheeps(sqlQuery);
+            SELECT m.text, u.username, m.pub_date 
+            FROM message m
+            JOIN user u ON m.author_id = u.user_id
+            ORDER by m.pub_date desc
+            LIMIT 5
+            OFFSET @pageNum * 5";
+
+        return QueryCheeps(sqlQuery, new List<SqliteParameter> { new SqliteParameter("@pageNum", pageNum) });
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum)
     {
         var sqlQuery = @"
             SELECT m.text, u.username, m.pub_date
             FROM message m
             JOIN user u ON m.author_id = u.user_id
             WHERE u.username = @author
-            ORDER BY m.pub_date DESC";
-        
-        return QueryCheeps(sqlQuery, new SqliteParameter("@author", author));
+            ORDER BY m.pub_date DESC
+            LIMIT 5
+            OFFSET @pageNum * 5";
+
+        return QueryCheeps(sqlQuery, new List<SqliteParameter> { new SqliteParameter("@author", author), new SqliteParameter("@pageNum", pageNum) });
     }
 
-    private List<CheepViewModel> QueryCheeps(string sqlQuery, SqliteParameter? parameter = null)
+    private List<CheepViewModel> QueryCheeps(string sqlQuery, List<SqliteParameter> parameters)
     {
         List<CheepViewModel> cheeps = new();
-        
+
         using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}"))
         {
             connection.Open();
@@ -53,7 +58,7 @@ public class DBFacade
             var command = connection.CreateCommand();
             command.CommandText = sqlQuery;
 
-            if (parameter != null)
+            foreach (var parameter in parameters)
             {
                 command.Parameters.Add(parameter);
             }
@@ -62,15 +67,15 @@ public class DBFacade
             while (reader.Read())
             {
                 CheepViewModel cheep = new(
-                    reader.GetString(0),
                     reader.GetString(1),
+                    reader.GetString(0),
                     reader.GetString(2)
                 );
 
                 cheeps.Add(cheep);
             }
         }
-        
+
         return cheeps;
     }
 }
