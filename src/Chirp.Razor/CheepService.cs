@@ -18,23 +18,22 @@ public class CheepService : ICheepService
 
     public List<CheepViewModel> GetSelectCheeps(int pageNum)
     {
+        if (pageNum > 0)
+        {
+            pageNum -= 1;
+        }
         var _cheeps = facade.GetCheeps(pageNum);
         return _cheeps;
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum)
     {
+        if (pageNum > 0)
+        {
+            pageNum -= 1;
+        }
         // filter by the provided author name
         var _cheeps = facade.GetCheepsFromAuthor(author, pageNum);
         return _cheeps;
     }
-
-    private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
-    {
-        // Unix timestamp is seconds past epoch
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp);
-        return dateTime.ToString("MM/dd/yy H:mm:ss");
-    }
-
 }
