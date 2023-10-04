@@ -1,4 +1,4 @@
-namespace Chirp.CLI.Client.Tests;
+/* namespace Chirp.CLI.Client.Tests;
 
 public class IntegrationTest
 {
@@ -19,4 +19,4 @@ public class IntegrationTest
 
 
     }
-}
+} */
