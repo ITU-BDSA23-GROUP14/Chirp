@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
-using SimpleDB;
-using System.Diagnostics;
 using System.Net.Http.Headers;
+using DatabaseInterface;
+using CSVDatabase;
 
 namespace Chirp.CSVDB.Tests
 {

@@ -3,8 +3,7 @@
 */
 
 using System.CommandLine;
-using SimpleDB;
-using System.Net.Http.Json;
+using RemoteDatabase;
 
 /* The following code using System.CommandLine is inspired by "Tutorial: Get started with System.CommandLine" from Microsoft
     Link: https://learn.microsoft.com/en-us/dotnet/standard/commandline/get-started-tutorial
@@ -13,14 +12,16 @@ using System.Net.Http.Json;
 var r = new RootCommand();                                                      // base of System.CommandLine that we attach commands to
 
 var baseURL = "https://bdsagroup14chirpremotedb.azurewebsites.net/";
+
+var db = RemoteDatabase<Cheep>.Instance(baseURL);
 using HttpClient client = new();
 client.BaseAddress = new Uri(baseURL);
 
 var readCommand = new Command("read", "Read a Cheep!");
-readCommand.SetHandler(async () =>                                              // SetHandler handles what happens when we run the command
-{                                                                   
-    var cheep = await client.GetFromJsonAsync<IEnumerable<Cheep>>("cheeps");
-    
+readCommand.SetHandler(() =>                                              // SetHandler handles what happens when we run the command
+{
+    var cheep = db.Read();
+
     if (cheep != null)
     {
         UserInterface.PrintCheeps(cheep);
@@ -39,28 +40,18 @@ var writeArgument = new Argument<string>(
 writeCommand.AddArgument(writeArgument);                                        // writeArgument forces user to write smth (so "dotnet run -- cheep" on its own would be illegal/impossible)
 writeCommand.SetHandler(AddChirp, writeArgument);
 
-
 // Add all commands
 r.AddCommand(readCommand);
 r.AddCommand(writeCommand);
 
 r.Invoke(args);                                                                 // necessary line to run the program using user input
 
-async Task AddChirp(string cheepText)
+void AddChirp(string cheepText)
 {
     string username = Environment.UserName;
     long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
     Cheep? cheep = new(username, $"\"{cheepText}\"", currentTime);
-
-    var HTTPResponse = await client.PostAsJsonAsync("cheep", cheep);
-
-    if (HTTPResponse.IsSuccessStatusCode)
-    {
-        Console.WriteLine("Cheep successfully posted.");
-    }
-    else
-    {
-        Console.WriteLine($"Failed to post cheep. Status code: {HTTPResponse.StatusCode} ");
-    }
+    
+    db.Store(cheep);
 }
