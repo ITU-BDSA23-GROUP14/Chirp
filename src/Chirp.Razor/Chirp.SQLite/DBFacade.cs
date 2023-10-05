@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.Data.Sqlite;
 using ViewModel;
 
@@ -12,7 +13,8 @@ public class DBFacade
         // If succesfullly located then use the path, otherwise create it
         if (string.IsNullOrEmpty(chirpDbPath))
         {
-            sqlDBFilePath = Path.Combine(Path.GetTempPath(), "chirp.db");
+            //sqlDBFilePath = Path.Combine(Path.GetTempPath(), "chirp.db");
+            sqlDBFilePath = "data/chirp.db";
         }
         else
         {
@@ -23,12 +25,12 @@ public class DBFacade
     public List<CheepViewModel> GetCheeps(int pageNum)
     {
         var sqlQuery = @"
-            SELECT m.text, u.username, m.pub_date 
+            SELECT m.text, u.username, strftime('%m/%d/%Y %H:%M:%S', m.pub_date, 'unixepoch', 'localtime') as time 
             FROM message m
             JOIN user u ON m.author_id = u.user_id
-            ORDER by m.pub_date desc
-            LIMIT 5
-            OFFSET @pageNum * 5";
+            ORDER by time desc
+            LIMIT 32
+            OFFSET @pageNum * 32";
 
         return QueryCheeps(sqlQuery, new List<SqliteParameter> { new SqliteParameter("@pageNum", pageNum) });
     }
@@ -36,13 +38,13 @@ public class DBFacade
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum)
     {
         var sqlQuery = @"
-            SELECT m.text, u.username, m.pub_date
+            SELECT m.text, u.username, strftime('%m/%d/%Y %H:%M:%S', m.pub_date, 'unixepoch', 'localtime') as time
             FROM message m
             JOIN user u ON m.author_id = u.user_id
             WHERE u.username = @author
-            ORDER BY m.pub_date DESC
-            LIMIT 5
-            OFFSET @pageNum * 5";
+            ORDER BY time DESC
+            LIMIT 32
+            OFFSET @pageNum * 32";
 
         return QueryCheeps(sqlQuery, new List<SqliteParameter> { new SqliteParameter("@author", author), new SqliteParameter("@pageNum", pageNum) });
     }

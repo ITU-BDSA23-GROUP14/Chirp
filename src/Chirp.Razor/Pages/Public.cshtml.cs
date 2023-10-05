@@ -15,10 +15,11 @@ public class PublicModel : PageModel
         _service = service;
     }
 
-    public ActionResult OnGet(int pageNum)
+    public ActionResult OnGet()
     {
-        Console.WriteLine($"page is {pageNum}");
-        Cheeps = _service.GetSelectCheeps(pageNum);
+        int.TryParse(Request.Query["page"], out int page);
+        Console.WriteLine($"page is {page}");
+        Cheeps = _service.GetSelectCheeps(page);
         return Page();
     }
 }

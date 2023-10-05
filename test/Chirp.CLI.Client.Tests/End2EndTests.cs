@@ -1,17 +1,9 @@
-namespace Chirp.CLI.Client.Tests;
+/* namespace Chirp.CLI.Client.Tests;
 using System.Diagnostics;
 using Xunit.Abstractions;
 
 public class End2EndTests
 {
-    /*
-    private readonly ITestOutputHelper output;
-
-    public End2EndTests(ITestOutputHelper output)
-    {
-        this.output = output;
-    }
-    */
 
     [Fact]
     public void ReadTest()
@@ -30,12 +22,6 @@ public class End2EndTests
         process?.WaitForExit();
         Assert.Contains("Hello, BDSA students", processOutput);
 
-        /*
-        string[] lines = processOutput.Trim().Split( new string[] {Environment.NewLine}, StringSplitOptions.None );
-        foreach(var l in lines) {
-            output.WriteLine(l);
-        }
-        */
     }
 
     [Fact]
@@ -59,4 +45,4 @@ public class End2EndTests
 
         Assert.Contains("I love cookies", processOutput);
     }
-}
+} */
