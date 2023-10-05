@@ -1,39 +1,42 @@
 using ViewModel;
+using Facade;
 
-public interface ICheepService
+namespace Service
 {
-    //public List<CheepViewModel> GetCheeps();
-    public List<CheepViewModel> GetSelectCheeps(int pageNum);
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum);
-}
-
-public class CheepService : ICheepService
-{
-    private readonly DBFacade facade;
-
-    public CheepService()
+    public interface ICheepService
     {
-        this.facade = new DBFacade();
+        public List<CheepViewModel> GetSelectCheeps(int pageNum);
+        public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum);
     }
 
-    public List<CheepViewModel> GetSelectCheeps(int pageNum)
+    public class CheepService : ICheepService
     {
-        if (pageNum > 0)
-        {
-            pageNum -= 1;
-        }
-        var _cheeps = facade.GetCheeps(pageNum);
-        return _cheeps;
-    }
+        private readonly DBFacade facade;
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum)
-    {
-        if (pageNum > 0)
+        public CheepService()
         {
-            pageNum -= 1;
+            facade = new DBFacade();
         }
-        // filter by the provided author name
-        var _cheeps = facade.GetCheepsFromAuthor(author, pageNum);
-        return _cheeps;
+
+        public List<CheepViewModel> GetSelectCheeps(int pageNum)
+        {
+            if (pageNum > 0)
+            {
+                pageNum -= 1;
+            }
+            var _cheeps = facade.GetCheeps(pageNum);
+            return _cheeps;
+        }
+
+        public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNum)
+        {
+            if (pageNum > 0)
+            {
+                pageNum -= 1;
+            }
+            // filter by the provided author name
+            var _cheeps = facade.GetCheepsFromAuthor(author, pageNum);
+            return _cheeps;
+        }
     }
 }
