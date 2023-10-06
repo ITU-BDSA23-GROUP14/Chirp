@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ViewModel;
+using Service;
 
 namespace Chirp.Razor.Pages;
 
