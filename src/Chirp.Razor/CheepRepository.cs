@@ -4,7 +4,6 @@ using Chirp.Models;
 
 public interface ICheepRepository
 {
-    //public List<CheepViewModel> GetCheeps();
     public List<CheepViewModel> GetCheeps(int page);
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int page);
 }
