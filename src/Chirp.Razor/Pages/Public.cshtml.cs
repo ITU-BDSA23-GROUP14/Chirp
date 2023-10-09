@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ViewModel;
+using Chirp.DTO;
 
 namespace Chirp.Razor.Pages;
 
 public class PublicModel : PageModel
 {
     private readonly ICheepRepository _repository;
-    public List<CheepViewModel> Cheeps { get; set; }
+    public List<CheepDTO> Cheeps { get; set; }
 
     public PublicModel(ICheepRepository repository)
     {
@@ -19,7 +19,7 @@ public class PublicModel : PageModel
     {
         int.TryParse(Request.Query["page"], out int page);
         Console.WriteLine($"page is {page}");
-        Cheeps = _repository.GetCheeps(page);
+        Cheeps = _repository.GetCheepDTOs(page);
         return Page();
     }
 }
