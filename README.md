@@ -28,9 +28,9 @@ The acceptance criteria should be a list of subtasks that collectively complete 
 The full task description should be a copy of the task provided by the course
 
 # Releases
-Releases are of the format <vx.y.z> where 
-- x represents a major version
-- y represents an update to a major version
-- z represents a minor update
+Release rules are based on: https://semver.org/
 
-For example, the first major release is V1.0.0
+Releases are of the format <vx.y.z> where 
+- x: MAJOR version when you make incompatible API changes
+- y: MINOR version when you add functionality in a backward compatible manner
+- z: PATCH version when you make backward compatible bug fixes
