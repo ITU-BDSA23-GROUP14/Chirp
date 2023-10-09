@@ -1,26 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ViewModel;
-using Service;
 
 namespace Chirp.Razor.Pages;
 
 public class UserTimelineModel : PageModel
 {
-    private readonly ICheepService _service;
+    private readonly ICheepRepository _repository;
     public List<CheepViewModel> Cheeps { get; set; }
 
-    public UserTimelineModel(ICheepService service)
+    public UserTimelineModel(ICheepRepository repository)
     {
         Cheeps = new();
-        _service = service;
+        _repository = repository;
     }
 
     public ActionResult OnGet(string author)
     {
         int.TryParse(Request.Query["page"], out int page);
         Console.WriteLine($"page is {page}");
-        Cheeps = _service.GetCheepsFromAuthor(author, page);
+        Cheeps = _repository.GetCheepsFromAuthor(author, page);
         return Page();
     }
 }
