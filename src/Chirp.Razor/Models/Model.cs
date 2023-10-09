@@ -24,7 +24,7 @@ public class ChirpDBContext : DbContext
 
 public class Author
 {
-    public int Id { get; set; }
+    public int AuthorId { get; set; }
     public required string Name { get; set; }
     public required string Email { get; set; }
     public ICollection<Cheep> Cheeps { get; set; } = new List<Cheep>();
@@ -32,7 +32,7 @@ public class Author
 
 public class Cheep
 {
-    public int Id { get; set; }
+    public int CheepId { get; set; }
     public int AuthorId { get; set; }
     public required Author Author { get; set; }
     public string? Text { get; set; }
