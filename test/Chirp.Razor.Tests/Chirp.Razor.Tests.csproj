@@ -26,8 +26,11 @@
     </PackageReference>
   </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\Chirp.Razor\Chirp.Razor.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\src\Chirp.Razor\data\chirp.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <ProjectReference Include="..\..\src\Chirp.Razor\Chirp.Razor.csproj" />
+  </ItemGroup>
 
 </Project>

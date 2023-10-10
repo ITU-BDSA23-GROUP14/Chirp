@@ -21,7 +21,7 @@ namespace RazorTest
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
 
-            var cheepText = "With back to my friend, patience!";  // This is the earliest registered cheep (ie. it shows up on the first page and is thus included in the "/" response)
+            var cheepText = "Hello, BDSA students!";  // This is the earliest registered cheep (ie. it shows up on the first page and is thus included in the "/" response)
 
             Assert.Contains(cheepText, content);
         }
