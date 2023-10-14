@@ -24,10 +24,10 @@ namespace Main
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<ChirpDBContext>();
+                context.Database.Migrate();
 
                 //Then you can use the context to seed the database for example
                 DbInitializer.SeedDatabase(context);
-                context.Database.Migrate();
             }
 
             // Configure the HTTP request pipeline.
