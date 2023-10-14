@@ -12,21 +12,23 @@ namespace Main
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            string? chirpDbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH");       // Attempt to get the database path from the environment variable
-
-            // If succesfullly located then use the path, otherwise create it
-            if (string.IsNullOrEmpty(chirpDbPath))
-            {
-                //sqlDBFilePath = Path.Combine(Path.GetTempPath(), "chirp.db");
-                chirpDbPath = "data/chirp.db";
-            }
-
             // Add services to the container.
             builder.Services.AddRazorPages();
-            builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite($"Data Source={chirpDbPath}"));
-            builder.Services.AddTransient<ICheepRepository, CheepRepository>();
+            builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("Chirp")));
+            builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
             var app = builder.Build();
+
+            // Seed database
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<ChirpDBContext>();
+                context.Database.Migrate();
+
+                //Then you can use the context to seed the database for example
+                DbInitializer.SeedDatabase(context);
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
