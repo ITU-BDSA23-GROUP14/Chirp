@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Chirp.Models;
+namespace Chirp.Infrastructure;
 
 public class ChirpDBContext : DbContext
 {
@@ -20,21 +20,4 @@ public class ChirpDBContext : DbContext
             .HasForeignKey(e => e.AuthorId)
             .IsRequired();
     }
-}
-
-public class Author
-{
-    public int AuthorId { get; set; }
-    public required string Name { get; set; }
-    public required string Email { get; set; }
-    public ICollection<Cheep> Cheeps { get; set; } = new List<Cheep>();
-}
-
-public class Cheep
-{
-    public int CheepId { get; set; }
-    public int AuthorId { get; set; }
-    public required Author Author { get; set; }
-    public string? Text { get; set; }
-    public DateTime TimeStamp { get; set; }
 }

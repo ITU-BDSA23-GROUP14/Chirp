@@ -1,12 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Chirp.Models;
-using Chirp.DTO;
+using Chirp.Core;
 
-public interface ICheepRepository
-{
-    public List<CheepDTO> GetCheepDTOs(int page);
-    public List<CheepDTO> GetCheepDTOsFromAuthor(string author, int page);
-}
+namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository
 {

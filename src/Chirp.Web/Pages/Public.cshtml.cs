@@ -1,25 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Chirp.DTO;
+using Chirp.Core;
 
-namespace Chirp.Razor.Pages;
+namespace Chirp.Web;
 
-public class UserTimelineModel : PageModel
+public class PublicModel : PageModel
 {
     private readonly ICheepRepository _repository;
     public List<CheepDTO> Cheeps { get; set; }
 
-    public UserTimelineModel(ICheepRepository repository)
+    public PublicModel(ICheepRepository repository)
     {
         Cheeps = new();
         _repository = repository;
     }
 
-    public ActionResult OnGet(string author)
+    public ActionResult OnGet()
     {
         int.TryParse(Request.Query["page"], out int page);
         Console.WriteLine($"page is {page}");
-        Cheeps = _repository.GetCheepDTOsFromAuthor(author, page);
+        Cheeps = _repository.GetCheepDTOs(page);
         return Page();
     }
 }

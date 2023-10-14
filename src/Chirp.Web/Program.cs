@@ -1,4 +1,5 @@
-using Chirp.Models;
+using Chirp.Infrastructure;
+using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
 
 Main.Program.BuildAndRun(args);
