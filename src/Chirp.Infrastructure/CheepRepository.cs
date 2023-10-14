@@ -10,7 +10,6 @@ public class CheepRepository : ICheepRepository
     public CheepRepository(ChirpDBContext dbContext)
     {
         _dbContext = dbContext;
-        DbInitializer.SeedDatabase(_dbContext);
     }
 
     public List<CheepDTO> GetCheepDTOs(int page)
