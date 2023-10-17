@@ -14,7 +14,10 @@ namespace Main
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-            builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("Chirp")));
+
+            var chirpDBPath = Path.Combine(Path.GetTempPath(), "chirp.db");
+            builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite($"Data Source={chirpDBPath}"));
+
             builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
             var app = builder.Build();
@@ -26,7 +29,6 @@ namespace Main
                 var context = services.GetRequiredService<ChirpDBContext>();
                 context.Database.Migrate();
 
-                //Then you can use the context to seed the database for example
                 DbInitializer.SeedDatabase(context);
             }
 
