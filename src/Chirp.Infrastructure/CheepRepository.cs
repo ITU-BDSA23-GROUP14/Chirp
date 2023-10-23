@@ -9,7 +9,6 @@ public class CheepRepository : ICheepRepository
     public CheepRepository(ChirpDBContext dbContext)
     {
         _dbContext = dbContext;
-        DbInitializer.SeedDatabase(_dbContext);
     }
 
     public void CreateAuthor(string name, string email)
