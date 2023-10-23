@@ -102,7 +102,7 @@ public class UnitTests : IDisposable
         // Assert
         Assert.Equal("Helge", cheep.Author);
         Assert.Equal("Hello, BDSA students!", cheep.Text);
-        Assert.Equal("01-08-23 12:16:48", cheep.TimeStamp);
+        Assert.Equal("01/08/23 12:16:48", cheep.TimeStamp);
     }
 
     [Theory]
