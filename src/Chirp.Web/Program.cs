@@ -2,54 +2,45 @@ using Chirp.Infrastructure;
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
 
-Main.Program.BuildAndRun(args);
+var builder = WebApplication.CreateBuilder(args);
 
-namespace Main
+// Add services to the container.
+builder.Services.AddRazorPages();
+
+var chirpDBPath = Path.Combine(Path.GetTempPath(), "chirp.db");
+builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite($"Data Source={chirpDBPath}"));
+
+builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+
+var app = builder.Build();
+
+// Seed database
+using (var scope = app.Services.CreateScope())
 {
-    public partial class Program
-    {
-        public static WebApplication BuildAndRun(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ChirpDBContext>();
+    context.Database.Migrate();
 
-            // Add services to the container.
-            builder.Services.AddRazorPages();
+    DbInitializer.SeedDatabase(context);
+}
 
-            var chirpDBPath = Path.Combine(Path.GetTempPath(), "chirp.db");
-            builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite($"Data Source={chirpDBPath}"));
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
 
-            builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 
-            var app = builder.Build();
+app.UseRouting();
 
-            // Seed database
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var context = services.GetRequiredService<ChirpDBContext>();
-                context.Database.Migrate();
+app.MapRazorPages();
 
-                DbInitializer.SeedDatabase(context);
-            }
+app.Run();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.MapRazorPages();
-
-            app.Run();
-
-            return app;
-        }
-    }
+public partial class Program
+{
 }
