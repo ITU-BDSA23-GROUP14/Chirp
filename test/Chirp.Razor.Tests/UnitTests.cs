@@ -2,13 +2,14 @@ using Chirp.Infrastructure;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace UnitTests;
+namespace Chirp.Tests;
 
 public class UnitTests : IDisposable
 {
     private readonly SqliteConnection _connection;
     private readonly ChirpDBContext _context;
-    private readonly CheepRepository _repository;
+    private readonly CheepRepository _CheepRepository;
+    private readonly AuthorRepository _AuthorRepository;
 
     public UnitTests()
     {
@@ -23,7 +24,9 @@ public class UnitTests : IDisposable
 
         DbInitializer.SeedDatabase(_context); 
 
-        _repository = new CheepRepository(_context);
+        _CheepRepository = new CheepRepository(_context);
+        _AuthorRepository = new AuthorRepository(_context);
+        
     }
 
     public void Dispose()
@@ -44,7 +47,7 @@ public class UnitTests : IDisposable
     public void CreateAuthor_Adds_Author_To_Database()
     {
         // Act
-        _repository.CreateAuthor("Batman", "bruce@wayneenterprises.dc");
+        _AuthorRepository.CreateAuthor("Batman", "bruce@wayneenterprises.dc");
         var created = _context.Authors.SingleOrDefault(c => c.Name == "Batman");
         
         // Assert
@@ -55,8 +58,8 @@ public class UnitTests : IDisposable
     public void CreateCheep_Adds_Cheep_To_Database()
     {
         // Add to database
-        _repository.CreateCheep("Hello world", "Superman", "clark@notkent.dc");
-        var cheeps = _repository.GetCheepDTOsFromAuthor("Superman", 1);
+        _CheepRepository.CreateCheep("Hello world", "Superman", "clark@notkent.dc");
+        var cheeps = _CheepRepository.GetCheepDTOsFromAuthor("Superman", 1);
 
         // Assert
         Assert.Contains(cheeps, cheep => cheep.Text == "Hello world");
@@ -66,7 +69,7 @@ public class UnitTests : IDisposable
     public void GetAuthorByMail_returns_proper_name()
     {
         // Act
-        var author = _repository.GetAuthorByEmail("ropf@itu.dk");
+        var author = _AuthorRepository.GetAuthorByEmail("ropf@itu.dk");
         
         // Assert
         Assert.Equal("Helge", author?.Name);
@@ -76,7 +79,7 @@ public class UnitTests : IDisposable
     public void GetAuthorByName_returns_proper_name()
     {
         //Act
-        var author = _repository.GetAuthorByName("Helge");
+        var author = _AuthorRepository.GetAuthorByName("Helge");
         
         // Assert
         Assert.Equal("Helge", author?.Name);
@@ -86,7 +89,7 @@ public class UnitTests : IDisposable
     public void GetCheepDTOs_returns_32_cheeps()
     {
         // Act
-        var lst = _repository.GetCheepDTOs(0);
+        var lst = _CheepRepository.GetCheepDTOs(0);
         
         // Assert
         Assert.Equal(32, lst.Count);
@@ -96,7 +99,7 @@ public class UnitTests : IDisposable
     public void GetCheepDTOsFromAuthor_returns_proper_cheep_format()
     {
         // Act
-        var lst = _repository.GetCheepDTOsFromAuthor("Helge", 0);
+        var lst = _CheepRepository.GetCheepDTOsFromAuthor("Helge", 0);
         var cheep = lst[0];
         
         // Assert
@@ -111,7 +114,7 @@ public class UnitTests : IDisposable
     public void GetCheepDTOsFromAuthor_returns_cheeps_from_author(string author, int page, string expectedMessage)
     {
         // Act
-        var cheeps = _repository.GetCheepDTOsFromAuthor(author, page);
+        var cheeps = _CheepRepository.GetCheepDTOsFromAuthor(author, page);
         
         // Assert
         Assert.Contains(cheeps, cheep => cheep.Text == expectedMessage);
@@ -121,7 +124,7 @@ public class UnitTests : IDisposable
     public void GetCheepDTOsFromAuthor_returns_first_32_cheeps_from_author()
     {
         // Act
-        var cheeps = _repository.GetCheepDTOsFromAuthor("Jacqualine Gilcoine", 1);
+        var cheeps = _CheepRepository.GetCheepDTOsFromAuthor("Jacqualine Gilcoine", 1);
 
         // Assert
         Assert.True(cheeps.Count == 32);
