@@ -80,7 +80,7 @@ public class CheepRepository : ICheepRepository
                 {
                     Author = c.Author.Name,
                     Text = c.Text ?? "",
-                    TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss")
+                    TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
                 }).Skip(32 * page).Take(32).ToList();
     }
 
@@ -97,7 +97,7 @@ public class CheepRepository : ICheepRepository
                 {
                     Author = c.Author.Name,
                     Text = c.Text ?? "",
-                    TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss")
+                    TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
                 }).Skip(32 * page).Take(32).ToList();
     }
 
