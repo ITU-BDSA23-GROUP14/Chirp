@@ -26,7 +26,6 @@ public class UnitTests : IDisposable
 
         _CheepRepository = new CheepRepository(_context);
         _AuthorRepository = new AuthorRepository(_context);
-        
     }
 
     public void Dispose()

@@ -1,13 +1,19 @@
+using System.Data.Common;
+using Microsoft.Data.Sqlite;
+using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Chirp.Tests;
 
-public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+public class IntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _fixture;
+    private readonly CustomWebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
-    public IntegrationTests(WebApplicationFactory<Program> fixture)
+    public IntegrationTests(CustomWebApplicationFactory<Program> fixture)
     {
         // Arrange
         _fixture = fixture;
