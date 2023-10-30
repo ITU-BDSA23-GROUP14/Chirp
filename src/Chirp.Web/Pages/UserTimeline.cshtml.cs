@@ -18,7 +18,6 @@ public class UserTimelineModel : PageModel
     public ActionResult OnGet(string author)
     {
         int.TryParse(Request.Query["page"], out int page);
-        Console.WriteLine($"page is {page}");
         Cheeps = _repository.GetCheepDTOsFromAuthor(author, page);
         return Page();
     }
