@@ -18,7 +18,7 @@ builder.Services.AddRazorPages()
 
 
 var chirpDBPath = Path.Combine(Path.GetTempPath(), "chirp.db");
-builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlite($"Data Source={chirpDBPath}"));
+builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Chirp")));
 
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
