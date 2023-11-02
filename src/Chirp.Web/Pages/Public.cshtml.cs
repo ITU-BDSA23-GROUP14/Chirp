@@ -18,7 +18,6 @@ public class PublicModel : PageModel
     public ActionResult OnGet()
     {
         int.TryParse(Request.Query["page"], out int page);
-        Console.WriteLine($"page is {page}");
         Cheeps = _repository.GetCheepDTOs(page);
         return Page();
     }
