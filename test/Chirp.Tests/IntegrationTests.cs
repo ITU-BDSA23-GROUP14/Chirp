@@ -1,10 +1,12 @@
-using System.Data.Common;
-using Microsoft.Data.Sqlite;
-using Chirp.Infrastructure;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
+using System.Text.Encodings.Web;
+using System.Security.Claims;
+using Microsoft.AspNetCore.TestHost;
+using System.Net.Http.Headers;
 
 namespace Chirp.Tests;
 
@@ -17,7 +19,24 @@ public class IntegrationTests : IClassFixture<CustomWebApplicationFactory<Progra
     {
         // Arrange
         _fixture = fixture;
-        _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
+        
+        // Change/remove authorisation to be able to test private timelines, code taken from https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-7.0
+        _client = _fixture.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddAuthentication(defaultScheme: "TestScheme")
+                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                        "TestScheme", options => { });
+            });
+        })
+        .CreateClient(new WebApplicationFactoryClientOptions
+        {
+            HandleCookies = true,
+            AllowAutoRedirect = false,
+        });
+
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme: "TestScheme");
     }
 
     [Fact]
@@ -104,5 +123,27 @@ public class IntegrationTests : IClassFixture<CustomWebApplicationFactory<Progra
 
         // Assert
         Assert.Equal(32, count);
+    }
+}
+
+// Mock AuthHandler to be able to access private timelines taken from https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-7.0
+public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+{
+    public TestAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
+        ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
+        : base(options, logger, encoder, clock)
+    {
+    }
+
+    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+    {
+        var claims = new[] { new Claim(ClaimTypes.Name, "Test user") };
+        var identity = new ClaimsIdentity(claims, "Test");
+        var principal = new ClaimsPrincipal(identity);
+        var ticket = new AuthenticationTicket(principal, "TestScheme");
+
+        var result = AuthenticateResult.Success(ticket);
+
+        return Task.FromResult(result);
     }
 }
