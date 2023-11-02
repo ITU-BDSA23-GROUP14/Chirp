@@ -1,4 +1,6 @@
 ﻿@page "/{author}"
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize]
 @model Chirp.Web.UserTimelineModel
 @{
     ViewData["Title"] = "Chirp!";
