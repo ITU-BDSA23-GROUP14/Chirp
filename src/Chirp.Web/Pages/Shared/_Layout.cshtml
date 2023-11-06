@@ -11,20 +11,19 @@
     <div class=page>
         <h1><img src="/images/icon1.png" alt="Icon1" />Chirp!</h1>
         <div class=navigation>
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity!.IsAuthenticated)
             {
                 <div>
                     <a href="/@(User.Identity.Name)">my timeline</a> |
                     <a href="/">public timeline</a> |
-                    <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a>
+                    <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">sign out</a>
                 </div>
             }
             else
             {
                 <div>
                     <a href="/">public timeline</a> |
-                    <a ...>register</a> |
-                    <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">Sign in</a>
+                    <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">sign in</a>
                 </div>
             }
         </div>
