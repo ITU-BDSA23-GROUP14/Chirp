@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Chirp.Tests;
 
-// The following class is adapted from https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-7.0    
+// The following class is adapted from https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-7.0
 public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -18,7 +18,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                 d => d.ServiceType ==
                     typeof(DbContextOptions<ChirpDBContext>));
 
-            if(dbContextDescriptor != null) 
+            if(dbContextDescriptor != null)
             {
                 services.Remove(dbContextDescriptor);
             }

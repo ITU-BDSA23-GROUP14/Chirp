@@ -29,7 +29,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ChirpDBContext>();
-    
+
     if (context.Database.IsInMemory()) {
         context.Database.EnsureCreated();
     }
@@ -70,3 +70,4 @@ app.Run();
 public partial class Program
 {
 }
+//Server=tcp:bdsagroup14-chirpdb.database.windows.net,1433;Initial Catalog=bdsagroup14db;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default";
