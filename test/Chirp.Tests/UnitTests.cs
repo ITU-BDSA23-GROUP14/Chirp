@@ -1,23 +1,17 @@
 using Chirp.Infrastructure;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Tests;
 
 public class UnitTests : IDisposable
 {
-    private readonly SqliteConnection _connection;
     private readonly ChirpDBContext _context;
     private readonly CheepRepository _CheepRepository;
     private readonly AuthorRepository _AuthorRepository;
 
     public UnitTests()
     {
-        // Arrange
-        _connection = new SqliteConnection("Filename=:memory:");
-        _connection.Open();
-
-        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(_connection);
+        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseInMemoryDatabase(databaseName: "DBMemoryUnit");
         _context = new ChirpDBContext(builder.Options);
 
         _context.Database.EnsureCreated();
@@ -36,7 +30,6 @@ public class UnitTests : IDisposable
         }
         finally
         {
-            _connection.Dispose();
         }
 
         GC.SuppressFinalize(this);
