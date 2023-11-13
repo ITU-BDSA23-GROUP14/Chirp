@@ -2,7 +2,7 @@ namespace Chirp.Core;
 
 public interface ICheepRepository
 {
-    public void CreateCheep(string cheepText, string authorName, string authorEmail);
+    public Task CreateCheep(CheepCreateDTO cheepCreate);
     public List<CheepDTO> GetCheepDTOs(int page);
     public List<CheepDTO> GetCheepDTOsFromAuthor(string author, int page);
 }

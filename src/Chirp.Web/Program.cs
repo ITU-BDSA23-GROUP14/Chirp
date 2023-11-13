@@ -4,23 +4,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-//builder.Services.AddRazorPages();
-
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+builder.Services
+    .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
-builder.Services.AddRazorPages()
+builder.Services
+    .AddRazorPages()
     .AddMicrosoftIdentityUI();
-
-
-var chirpDBPath = Path.Combine(Path.GetTempPath(), "chirp.db");
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Chirp")));
-
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+builder.Services.AddScoped<IValidator<CheepCreateDTO>, CheepCreateValidator>();
 
 var app = builder.Build();
 
