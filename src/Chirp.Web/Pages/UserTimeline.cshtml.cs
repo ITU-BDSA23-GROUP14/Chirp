@@ -21,4 +21,15 @@ public class UserTimelineModel : PageModel
         Cheeps = _repository.GetCheepDTOsFromAuthor(author, page);
         return Page();
     }
+
+    public async Task<IActionResult> OnPost(CheepCreateDTO newCheep)
+    {
+        String email = User.Claims.FirstOrDefault(c => c.Type == "emails")!.Value;
+
+        var cheep = new CheepCreateDTO { Text = newCheep.Text, Author = User.Identity!.Name!, Email = email };
+
+        await _repository.CreateCheep(cheep);
+
+        return Redirect($"/{User.Identity!.Name}");
+    }
 }

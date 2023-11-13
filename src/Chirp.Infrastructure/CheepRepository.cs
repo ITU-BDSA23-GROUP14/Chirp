@@ -1,31 +1,53 @@
+using System.Net.Mail;
 using Chirp.Core;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDBContext _dbContext;
+    private readonly IValidator<CheepCreateDTO> _validator;
 
-    public CheepRepository(ChirpDBContext dbContext)
+    public CheepRepository(ChirpDBContext dbContext, IValidator<CheepCreateDTO> validator)
     {
         _dbContext = dbContext;
+        _validator = validator;
     }
 
-    public void CreateCheep(string cheepText, string authorName, string authorEmail)
+    public async Task CreateCheep(CheepCreateDTO cheep)
     {
-        // Check if author exists. If not, create the author
-        var author = _dbContext.Authors.FirstOrDefault(author => author.Name == authorName);
-        if (author == null)
+        var validationResult = await _validator.ValidateAsync(cheep);
+
+        if (!validationResult.IsValid)
         {
-            author = new Author { Name = authorName, Email = authorEmail };
-            _dbContext.Add(author);
-            _dbContext.SaveChanges();
+            throw new ValidationException(validationResult.Errors);
         }
 
-        var cheep = new Cheep { Author = author, Text = cheepText };
 
-        _dbContext.Add(cheep);
-        _dbContext.SaveChanges();
+        var user = await _dbContext.Authors.SingleOrDefaultAsync(u => u.Name == cheep.Author);
+
+        // Check if author exists. If not, create the author
+        if (user == null)
+        {
+            Author author = new() { Name = cheep.Author, Email = cheep.Email };
+
+            await _dbContext.Authors.AddAsync(author);
+            await _dbContext.SaveChangesAsync();
+            user = author;
+        }
+
+        var entity = new Cheep
+        {
+            Author = user,
+            Text = cheep.Text,
+            TimeStamp = DateTime.UtcNow
+        };
+
+        await _dbContext.AddAsync(entity);
+        await _dbContext.SaveChangesAsync();
     }
 
     public List<CheepDTO> GetCheepDTOs(int page)
@@ -35,7 +57,7 @@ public class CheepRepository : ICheepRepository
             page -= 1;
         }
         return (from c in _dbContext.Cheeps
-                orderby c.TimeStamp
+                orderby c.TimeStamp descending
                 select new CheepDTO
                 {
                     Author = c.Author.Name,
@@ -52,7 +74,7 @@ public class CheepRepository : ICheepRepository
         }
         return (from c in _dbContext.Cheeps
                 where c.Author.Name == author
-                orderby c.TimeStamp
+                orderby c.TimeStamp descending
                 select new CheepDTO
                 {
                     Author = c.Author.Name,

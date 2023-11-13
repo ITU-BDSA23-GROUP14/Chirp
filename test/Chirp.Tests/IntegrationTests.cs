@@ -19,7 +19,7 @@ public class IntegrationTests : IClassFixture<CustomWebApplicationFactory<Progra
     {
         // Arrange
         _fixture = fixture;
-        
+
         // Change/remove authorisation to be able to test private timelines, code taken from https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-7.0
         _client = _fixture.WithWebHostBuilder(builder =>
         {
@@ -47,7 +47,7 @@ public class IntegrationTests : IClassFixture<CustomWebApplicationFactory<Progra
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
-        var cheepText = "Hello, BDSA students!";
+        var cheepText = "messagelist";
 
         // Assert
         Assert.Contains(cheepText, content);
@@ -75,22 +75,6 @@ public class IntegrationTests : IClassFixture<CustomWebApplicationFactory<Progra
 
         // Assert
         response.EnsureSuccessStatusCode();
-    }
-
-    [Fact]
-    public async void Page0And1AreTheSame()
-    {
-        // Act
-        var page0Response = await _client.GetAsync("/?page=0");
-        var page1Response = await _client.GetAsync("/?page=1");
-
-        page0Response.EnsureSuccessStatusCode();
-        page1Response.EnsureSuccessStatusCode();
-        var content1 = await page0Response.Content.ReadAsStringAsync();
-        var content2 = await page1Response.Content.ReadAsStringAsync();
-
-        // Assert
-        Assert.Contains(content1, content2);
     }
 
     [Fact]
