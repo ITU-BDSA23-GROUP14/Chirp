@@ -83,40 +83,34 @@ public class CheepRepository : ICheepRepository
                 }).Skip(32 * page).Take(32).ToList();
     }
 
-    /*
-    public List<CheepDTO> GetCheepDTOsFromFollowing(string authorName, int page)
+
+    public List<CheepDTO> GetCheepDTOsForPrivateTimeline(string author, int page)
     {
-        if (page > 0)
+    /*    if (page > 0)
         {
             page -= 1;
         }
 
-        // Find the authors following list
+        // Find IDs of all followed authors
         var followingAuthorIds =   (from a in _dbContext.Authors
-                                    join f in _dbContext.Followings on a.AuthorId equals f.AuthorId
-                                    where a.Name == authorName
-                                    select f.FollowedAuthorId).ToList();
+                                    where a.Name == author
+                                    select f.FollowedAuthorId).ToList(); 
 
+        // Return cheeps from author and followed authors
+        return (from c in _dbContext.Cheeps
+                where c.Author.Name == author
+                and
+                from c in _dbContext.Cheeps
+                where c.Author.ID == followingAuthorIds
 
-        // Query all cheeps by followed users and return the 32 cheeps on the current page
-        
-    }
+                orderby c.TimeStamp descending
+                select new CheepDTO
+                {
+                    Author = c.Author.Name,
+                    Text = c.Text ?? "",
+                    TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                }).Skip(32 * page).Take(32).ToList();
     */
-
-    /*
-    public List<CheepDTO> GetCheepDTOsForPrivateTimeline(string authorName, int page)
-    {
-        if (page > 0)
-        {
-            page -= 1;
-        }
-
-        var ownCheeps = GetCheepDTOsFromAuthor(string authorName, int page);
-        var followerCheeps = GetCheepDTOsFromFollowing(string authorName, int page);
-
-        var cheeps = 
-         
+    throw new NotImplementedException();
     }
-    */
-
 }

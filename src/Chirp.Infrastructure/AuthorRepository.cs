@@ -50,4 +50,28 @@ public class AuthorRepository : IAuthorRepository
 
         return new AuthorDTO { Name = author.Name };
     }
+
+    //add following
+    public void AddFollowing(string follower, string following)
+    {
+        var authorFollowing = _dbContext.Authors.FirstOrDefault(author => author.Name == following);
+        var authorFollower = _dbContext.Authors.FirstOrDefault(author => author.Name == follower);
+
+
+    }
+
+    //remove following
+    public void RemoveFollowing(string follower, string following)
+    {
+        var authorFollowing = _dbContext.Authors.FirstOrDefault(author => author.Name == following);
+        var authorFollower = _dbContext.Authors.FirstOrDefault(author => author.Name == follower);
+
+        if (authorFollowing == null || authorFollower == null)
+        {
+            throw new InvalidOperationException($"The author {follower} or {following} does not exist.");
+        }
+
+        //_dbContext.Authors
+
+    }
 }
