@@ -13,11 +13,13 @@ public class ChirpDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
         modelBuilder.Entity<Author>()
             .HasMany(e => e.Cheeps)
             .WithOne(e => e.Author)
             .HasForeignKey(e => e.AuthorId)
             .IsRequired();
+        modelBuilder.Entity<Author>()
+            .HasMany(e => e.Followers)
+            .WithMany(e => e.Following);
     }
 }
