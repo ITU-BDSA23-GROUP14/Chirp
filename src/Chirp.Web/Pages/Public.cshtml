@@ -19,8 +19,20 @@
                 <p>
                     <strong>
                         <a href="/@cheep.Author">@cheep.Author</a>
+                        
+                        @if (User.Identity!.IsAuthenticated){
+                            @if (Model.FollowedAuthors.Contains(cheep.Author)) // Check if the user is following the author
+                            {
+                                <button>Unfollow</button>
+                            }
+                            else
+                            {
+                                <button>Follow</button>
+                            }
+                        }
+                        
                     </strong>
-                    @cheep.Text
+            @cheep.Text
                     <small>&mdash; @cheep.TimeStamp</small>
                 </p>
             </li>

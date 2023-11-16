@@ -51,27 +51,62 @@ public class AuthorRepository : IAuthorRepository
         return new AuthorDTO { Name = author.Name };
     }
 
-    //add following
-    public void AddFollowing(string follower, string following)
+    public void AddFollowing(string user, string target)
     {
-        var authorFollowing = _dbContext.Authors.FirstOrDefault(author => author.Name == following);
-        var authorFollower = _dbContext.Authors.FirstOrDefault(author => author.Name == follower);
+        var author = _dbContext.Authors.FirstOrDefault(author => author.Name == user);
+        var authorToFollow = _dbContext.Authors.FirstOrDefault(author => author.Name == target);
 
-
+        if (author == null)
+        {
+            throw new InvalidOperationException($"The user {user} does not exist.");
+        }
+        else if (authorToFollow == null)
+        {
+            throw new InvalidOperationException($"The user {target} does not exist.");
+        }
+        else
+        {
+            author.Following.Remove(authorToFollow);
+            _dbContext.SaveChanges();
+        }
     }
 
-    //remove following
-    public void RemoveFollowing(string follower, string following)
+    public void RemoveFollowing(string user, string target)
     {
-        var authorFollowing = _dbContext.Authors.FirstOrDefault(author => author.Name == following);
-        var authorFollower = _dbContext.Authors.FirstOrDefault(author => author.Name == follower);
+        var author = _dbContext.Authors.FirstOrDefault(author => author.Name == user);
+        var authorToUnfollow = _dbContext.Authors.FirstOrDefault(author => author.Name == target);
 
-        if (authorFollowing == null || authorFollower == null)
+        if (author == null)
         {
-            throw new InvalidOperationException($"The author {follower} or {following} does not exist.");
+            throw new InvalidOperationException($"The user {user} does not exist.");
         }
+        else if (authorToUnfollow == null)
+        {
+            throw new InvalidOperationException($"The user {target} does not exist.");
+        }
+        else
+        {
+            author.Following.Remove(authorToUnfollow);
+            _dbContext.SaveChanges();
+        }
+    }
 
-        //_dbContext.Authors
+    public bool IsAuthorFollowingAuthor(string user, string target)
+    {
+        var author = _dbContext.Authors.FirstOrDefault(author => author.Name == user);
+        var authorTarget = _dbContext.Authors.FirstOrDefault(author => author.Name == target);
 
+        if (author == null)
+        {
+            throw new InvalidOperationException($"The user {user} does not exist.");
+        }
+        else if (authorTarget == null)
+        {
+            throw new InvalidOperationException($"The user {target} does not exist.");
+        }
+        else
+        {
+            return author.Following.Contains(authorTarget);
+        }
     }
 }

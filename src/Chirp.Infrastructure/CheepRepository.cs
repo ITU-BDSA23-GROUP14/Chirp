@@ -86,31 +86,31 @@ public class CheepRepository : ICheepRepository
 
     public List<CheepDTO> GetCheepDTOsForPrivateTimeline(string author, int page)
     {
-    /*    if (page > 0)
-        {
-            page -= 1;
-        }
+        /*    if (page > 0)
+            {
+                page -= 1;
+            }
 
-        // Find IDs of all followed authors
-        var followingAuthorIds =   (from a in _dbContext.Authors
-                                    where a.Name == author
-                                    select f.FollowedAuthorId).ToList(); 
+            // Find IDs of all followed authors
+            var followingAuthorIds =   (from a in _dbContext.Authors
+                                        where a.Name == author
+                                        select f.FollowedAuthorId).ToList(); 
 
-        // Return cheeps from author and followed authors
-        return (from c in _dbContext.Cheeps
-                where c.Author.Name == author
-                and
-                from c in _dbContext.Cheeps
-                where c.Author.ID == followingAuthorIds
+            // Return cheeps from author and followed authors
+            return (from c in _dbContext.Cheeps
+                    where c.Author.Name == author
+                    and
+                    from c in _dbContext.Cheeps
+                    where c.Author.ID == followingAuthorIds
 
-                orderby c.TimeStamp descending
-                select new CheepDTO
-                {
-                    Author = c.Author.Name,
-                    Text = c.Text ?? "",
-                    TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
-                }).Skip(32 * page).Take(32).ToList();
-    */
-    throw new NotImplementedException();
+                    orderby c.TimeStamp descending
+                    select new CheepDTO
+                    {
+                        Author = c.Author.Name,
+                        Text = c.Text ?? "",
+                        TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                    }).Skip(32 * page).Take(32).ToList();
+        */
+        throw new NotImplementedException();
     }
 }
