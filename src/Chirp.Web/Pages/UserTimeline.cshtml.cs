@@ -15,6 +15,14 @@ public class UserTimelineModel : PageModel
         _repository = repository;
     }
 
+    // public ActionResult OnGet(string author)
+    // {
+    //     int.TryParse(Request.Query["page"], out int page);
+    //     Cheeps = _repository.GetCheepDTOsFromAuthor(author, page);
+    //     return Page();
+    // }
+
+    // Ny: Skal hente dine cheeps + dem du følger
     public ActionResult OnGet(string author)
     {
         int.TryParse(Request.Query["page"], out int page);

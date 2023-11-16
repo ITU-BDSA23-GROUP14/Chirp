@@ -82,4 +82,41 @@ public class CheepRepository : ICheepRepository
                     TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
                 }).Skip(32 * page).Take(32).ToList();
     }
+
+    /*
+    public List<CheepDTO> GetCheepDTOsFromFollowing(string authorName, int page)
+    {
+        if (page > 0)
+        {
+            page -= 1;
+        }
+
+        // Find the authors following list
+        var followingAuthorIds =   (from a in _dbContext.Authors
+                                    join f in _dbContext.Followings on a.AuthorId equals f.AuthorId
+                                    where a.Name == authorName
+                                    select f.FollowedAuthorId).ToList();
+
+
+        // Query all cheeps by followed users and return the 32 cheeps on the current page
+        
+    }
+    */
+
+    /*
+    public List<CheepDTO> GetCheepDTOsForPrivateTimeline(string authorName, int page)
+    {
+        if (page > 0)
+        {
+            page -= 1;
+        }
+
+        var ownCheeps = GetCheepDTOsFromAuthor(string authorName, int page);
+        var followerCheeps = GetCheepDTOsFromFollowing(string authorName, int page);
+
+        var cheeps = 
+         
+    }
+    */
+
 }
