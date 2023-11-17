@@ -51,7 +51,7 @@ public class AuthorRepository : IAuthorRepository
         return new AuthorDTO { Name = author.Name };
     }
 
-    public void AddFollowing(string user, string target)
+    public async Task AddFollowing(string user, string target)
     {
         var author = _dbContext.Authors.FirstOrDefault(author => author.Name == user);
         var authorToFollow = _dbContext.Authors.FirstOrDefault(author => author.Name == target);
@@ -66,12 +66,12 @@ public class AuthorRepository : IAuthorRepository
         }
         else
         {
-            author.Following.Remove(authorToFollow);
-            _dbContext.SaveChanges();
+            author.Following.Add(authorToFollow);
+            await _dbContext.SaveChangesAsync();
         }
     }
 
-    public void RemoveFollowing(string user, string target)
+    public async Task RemoveFollowing(string user, string target)
     {
         var author = _dbContext.Authors.FirstOrDefault(author => author.Name == user);
         var authorToUnfollow = _dbContext.Authors.FirstOrDefault(author => author.Name == target);
@@ -87,7 +87,7 @@ public class AuthorRepository : IAuthorRepository
         else
         {
             author.Following.Remove(authorToUnfollow);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
     }
 

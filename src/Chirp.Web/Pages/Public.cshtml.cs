@@ -46,6 +46,20 @@ public class PublicModel : PageModel
             }
         }
         
-         return Page();
+        return Page();
     } 
+
+    public async Task<IActionResult> OnPostFollow(string authorToFollow)
+    {
+        string currentUser = User.Identity!.Name!;
+        await _authorRepository.AddFollowing(currentUser, authorToFollow);
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostUnfollow(string authorToUnfollow)
+    {
+        string currentUser = User.Identity!.Name!;
+        await _authorRepository.RemoveFollowing(currentUser, authorToUnfollow);
+        return RedirectToPage();
+    }
 }
