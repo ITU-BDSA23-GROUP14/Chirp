@@ -17,6 +17,7 @@ builder.Services
     .AddMicrosoftIdentityUI();
 builder.Services.AddDbContext<ChirpDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Chirp")));
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IValidator<CheepCreateDTO>, CheepCreateValidator>();
 
 var app = builder.Build();

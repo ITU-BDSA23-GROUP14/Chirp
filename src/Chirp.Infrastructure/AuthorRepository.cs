@@ -1,4 +1,5 @@
 using Chirp.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
 
@@ -49,5 +50,72 @@ public class AuthorRepository : IAuthorRepository
         }
 
         return new AuthorDTO { Name = author.Name };
+    }
+
+    public async Task AddFollowing(string user, string target)
+    {
+        var author = _dbContext.Authors.FirstOrDefault(author => author.Name == user);
+        var authorToFollow = _dbContext.Authors.FirstOrDefault(author => author.Name == target);
+
+        if (author == null)
+        {
+            throw new InvalidOperationException($"The user {user} does not exist.");
+        }
+        if (authorToFollow == null)
+        {
+            throw new InvalidOperationException($"The user {target} does not exist.");
+        }
+        if (author.AuthorId == authorToFollow!.AuthorId)
+        {
+            throw new InvalidOperationException($"You are not allowed to follow yourself.");
+        }
+        
+        author.Following.Add(authorToFollow);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task RemoveFollowing(string user, string target)
+    {
+        var authorToUnfollow = _dbContext.Authors.FirstOrDefault(author => author.Name == target);
+        
+        var author = _dbContext.Authors
+            .Include(author => author.Following.Where(followingauthor => followingauthor.Name == authorToUnfollow!.Name))
+            .FirstOrDefault(author => author.Name == user);
+        
+        if (author == null)
+        {
+            throw new InvalidOperationException($"The user {user} does not exist.");
+        }
+        if (authorToUnfollow == null)
+        {
+            throw new InvalidOperationException($"The user {target} does not exist.");
+        }
+        if (author.AuthorId == authorToUnfollow!.AuthorId)
+        {
+            throw new InvalidOperationException($"You are not allowed to follow yourself.");
+        }
+        
+        author.Following.Remove(authorToUnfollow);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public bool IsAuthorFollowingAuthor(string user, string target)
+    {
+        var author = _dbContext.Authors.FirstOrDefault(author => author.Name == user);
+        var authorTarget = _dbContext.Authors.FirstOrDefault(author => author.Name == target);
+
+        if (author == null)
+        {
+            throw new InvalidOperationException($"The user {user} does not exist.");
+        }
+        if (authorTarget == null)
+        {
+            throw new InvalidOperationException($"The user {target} does not exist.");
+        }
+        
+        var authorId = author.AuthorId;
+        var targetId = authorTarget.AuthorId;
+
+        return _dbContext.Authors.Any(author => author.AuthorId == authorId && author.Following.Any(target => target.AuthorId == targetId));
     }
 }
