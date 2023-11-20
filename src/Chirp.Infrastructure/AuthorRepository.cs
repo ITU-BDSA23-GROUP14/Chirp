@@ -1,4 +1,5 @@
 using Chirp.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
 
@@ -60,35 +61,34 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new InvalidOperationException($"The user {user} does not exist.");
         }
-        else if (authorToFollow == null)
+        if (authorToFollow == null)
         {
             throw new InvalidOperationException($"The user {target} does not exist.");
         }
-        else
-        {
-            author.Following.Add(authorToFollow);
-            await _dbContext.SaveChangesAsync();
-        }
+        
+        author.Following.Add(authorToFollow);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task RemoveFollowing(string user, string target)
     {
-        var author = _dbContext.Authors.FirstOrDefault(author => author.Name == user);
         var authorToUnfollow = _dbContext.Authors.FirstOrDefault(author => author.Name == target);
-
+        
+        var author = _dbContext.Authors
+            .Include(author => author.Following.Where(followingauthor => followingauthor.Name == authorToUnfollow!.Name))
+            .FirstOrDefault(author => author.Name == user);
+        
         if (author == null)
         {
             throw new InvalidOperationException($"The user {user} does not exist.");
         }
-        else if (authorToUnfollow == null)
+        if (authorToUnfollow == null)
         {
             throw new InvalidOperationException($"The user {target} does not exist.");
         }
-        else
-        {
-            author.Following.Remove(authorToUnfollow);
-            await _dbContext.SaveChangesAsync();
-        }
+        
+        author.Following.Remove(authorToUnfollow);
+        await _dbContext.SaveChangesAsync();
     }
 
     public bool IsAuthorFollowingAuthor(string user, string target)
@@ -100,13 +100,14 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new InvalidOperationException($"The user {user} does not exist.");
         }
-        else if (authorTarget == null)
+        if (authorTarget == null)
         {
             throw new InvalidOperationException($"The user {target} does not exist.");
         }
-        else
-        {
-            return author.Following.Contains(authorTarget);
-        }
+        
+        var authorId = author.AuthorId;
+        var targetId = authorTarget.AuthorId;
+
+        return _dbContext.Authors.Any(author => author.AuthorId == authorId && author.Following.Any(target => target.AuthorId == targetId));
     }
 }

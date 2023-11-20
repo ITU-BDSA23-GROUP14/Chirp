@@ -38,10 +38,10 @@ public class PublicModel : PageModel
         // List of the cheep authors that the user follows
         if (User.Identity!.IsAuthenticated){
             foreach (var c in Cheeps)
-            {
+            {   
                 if (_authorRepository.IsAuthorFollowingAuthor(User.Identity!.Name!, c.Author)) 
                 {
-                    FollowedAuthors.Add(c.Author);    
+                    FollowedAuthors.Add(c.Author); 
                 }
             }
         }

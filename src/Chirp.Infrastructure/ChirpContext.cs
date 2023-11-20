@@ -20,6 +20,6 @@ public class ChirpDBContext : DbContext
             .IsRequired();
         modelBuilder.Entity<Author>()
             .HasMany(e => e.Followers)
-            .WithMany(e => e.Following);
+            .WithMany(e => e.Following);  
     }
 }
