@@ -65,6 +65,10 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new InvalidOperationException($"The user {target} does not exist.");
         }
+        if (author.AuthorId == authorToFollow!.AuthorId)
+        {
+            throw new InvalidOperationException($"You are not allowed to follow yourself.");
+        }
         
         author.Following.Add(authorToFollow);
         await _dbContext.SaveChangesAsync();
@@ -85,6 +89,10 @@ public class AuthorRepository : IAuthorRepository
         if (authorToUnfollow == null)
         {
             throw new InvalidOperationException($"The user {target} does not exist.");
+        }
+        if (author.AuthorId == authorToUnfollow!.AuthorId)
+        {
+            throw new InvalidOperationException($"You are not allowed to follow yourself.");
         }
         
         author.Following.Remove(authorToUnfollow);

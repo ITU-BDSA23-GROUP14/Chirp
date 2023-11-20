@@ -21,7 +21,7 @@ public class PublicModel : PageModel
 
     public async Task<IActionResult> OnPost(CheepCreateDTO newCheep)
     {
-        String email = User.Claims.FirstOrDefault(c => c.Type == "emails")!.Value;
+        string email = User.Claims.FirstOrDefault(c => c.Type == "emails")!.Value;
 
         var cheep = new CheepCreateDTO { Text = newCheep.Text, Author = User.Identity!.Name!, Email = email };
 
@@ -37,9 +37,15 @@ public class PublicModel : PageModel
 
         // List of the cheep authors that the user follows
         if (User.Identity!.IsAuthenticated){
+            string name = User.Identity!.Name!;
+            if (_authorRepository.GetAuthorByName(name) == null) {
+                string email = User.Claims.FirstOrDefault(c => c.Type == "emails")!.Value;
+                _authorRepository.CreateAuthor(name, email);    
+            }
+
             foreach (var c in Cheeps)
             {   
-                if (_authorRepository.IsAuthorFollowingAuthor(User.Identity!.Name!, c.Author)) 
+                if (_authorRepository.IsAuthorFollowingAuthor(name, c.Author)) 
                 {
                     FollowedAuthors.Add(c.Author); 
                 }

@@ -16,18 +16,35 @@
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
-            @foreach (var cheep in Model.Cheeps)
-            {
-                <li>
-                    <p>
-                        <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
-                        </strong>
-                        @cheep.Text
-                        <small>&mdash; @cheep.TimeStamp</small>
-                    </p>
-                </li>
-            }
+        @foreach (var cheep in Model.Cheeps)
+        {
+            <li>
+                <div>
+                    <strong>
+                        <a href="/@cheep.Author">@cheep.Author</a>
+                    </strong>
+                    @if (User.Identity!.IsAuthenticated && cheep.Author != User.Identity.Name)
+                    {
+                        if (Model.FollowedAuthors.Contains(cheep.Author))
+                        {
+                            <form method="post" asp-page-handler="Unfollow" style="display: inline;">
+                                <input type="hidden" name="authorToUnfollow" value="@cheep.Author" />
+                                <button type="submit">Unfollow</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-page-handler="Follow" style="display: inline;">
+                                <input type="hidden" name="authorToFollow" value="@cheep.Author" />
+                                <button type="submit">Follow</button>
+                            </form>
+                        }
+                    }
+                </div>
+                <p>@cheep.Text</p>
+                <small>&mdash; @cheep.TimeStamp</small>
+            </li>
+        }
         </ul>
     }
     else

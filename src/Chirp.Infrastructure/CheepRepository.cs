@@ -83,34 +83,35 @@ public class CheepRepository : ICheepRepository
                 }).Skip(32 * page).Take(32).ToList();
     }
 
-
-    public List<CheepDTO> GetCheepDTOsForPrivateTimeline(string author, int page)
+    private List<CheepDTO> GetAllCheepDTOsFromAuthor(string author)
     {
-        /*    if (page > 0)
-            {
-                page -= 1;
-            }
+        return (from c in _dbContext.Cheeps
+                where c.Author.Name == author
+                orderby c.TimeStamp descending
+                select new CheepDTO
+                {
+                    Author = c.Author.Name,
+                    Text = c.Text ?? "",
+                    TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                }).ToList();
+    }
 
-            // Find IDs of all followed authors
-            var followingAuthorIds =   (from a in _dbContext.Authors
-                                        where a.Name == author
-                                        select f.FollowedAuthorId).ToList(); 
-
-            // Return cheeps from author and followed authors
-            return (from c in _dbContext.Cheeps
-                    where c.Author.Name == author
-                    and
-                    from c in _dbContext.Cheeps
-                    where c.Author.ID == followingAuthorIds
-
-                    orderby c.TimeStamp descending
-                    select new CheepDTO
-                    {
-                        Author = c.Author.Name,
-                        Text = c.Text ?? "",
-                        TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
-                    }).Skip(32 * page).Take(32).ToList();
-        */
-        throw new NotImplementedException();
+    public async Task<List<CheepDTO>> GetCheepDTOsForPrivateTimeline(string author, int page)
+    {
+        if (page > 0)
+        {
+            page -= 1;
+        }
+        List<CheepDTO> cheeps = new List<CheepDTO>();
+        var following = await (from a in _dbContext.Authors
+                         where a.Name == author
+                         select a.Following).ToListAsync();
+        foreach (var authors in following)
+        {
+            foreach (var a in authors)
+                cheeps.AddRange(GetAllCheepDTOsFromAuthor(a.Name));
+        }
+        cheeps.AddRange(GetAllCheepDTOsFromAuthor(author));
+        return (from a in cheeps orderby a.TimeStamp descending select a).Skip(32 * page).Take(32).ToList();
     }
 }
