@@ -130,4 +130,17 @@ public class AuthorRepository : IAuthorRepository
 
         return following;
     }
+
+    public async Task RemoveUserData(string user)
+    {
+        var author = await _dbContext.Authors
+            .Include(author => author.Followers)
+            .Include(author => author.Following)
+            .Include(author => author.Cheeps)
+            .FirstOrDefaultAsync(author => author.Name == user);
+
+        _dbContext.Remove(author!);
+
+        await _dbContext.SaveChangesAsync();
+    }
 }

@@ -11,7 +11,7 @@
     <h2>About me</h2>
 
     <!-- All stored data about the user -->
-    <!-- Implementation taken from: https://stackoverflow.com/questions/39125347/how-to-get-claim-inside-asp-net-core-razor-view -->
+    <!-- Implementation based on: https://stackoverflow.com/questions/39125347/how-to-get-claim-inside-asp-net-core-razor-view -->
     <h3>My information</h3>
     <div>
         <ul>
@@ -21,6 +21,11 @@
             <li>Identity Provider: @User.FindFirst("http://schemas.microsoft.com/identity/claims/identityprovider")?.Value</li>
         </ul>
     </div>
+    
+    <!-- 'Forget me!' button -->
+    <form method="post" asp-page-handler="ForgetMe" style="display: inline;">
+        <button type="submit" style="background-color: red; color: white">Forget me!</button>
+    </form>
 
     <!-- A list of users that the user follows -->
     <h3>List of the people I follow</h3>
@@ -65,5 +70,4 @@
     {
         <em>There are no cheeps posted.</em>
     }
-    
 </div>
