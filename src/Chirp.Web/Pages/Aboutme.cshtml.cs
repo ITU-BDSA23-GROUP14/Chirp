@@ -31,4 +31,12 @@ public class AboutmeModel : PageModel
 
         return Page();
     }
+
+    public async Task<IActionResult> OnPostForgetMe()
+    {
+        string name = User.Identity!.Name!;
+        await _authorRepository.RemoveUserData(name);
+        
+        return Redirect($"/MicrosoftIdentity/Account/SignOut");
+    }
 }
