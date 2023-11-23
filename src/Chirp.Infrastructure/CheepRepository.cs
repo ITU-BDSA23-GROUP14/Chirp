@@ -83,7 +83,7 @@ public class CheepRepository : ICheepRepository
                 }).Skip(32 * page).Take(32).ToList();
     }
 
-    private List<CheepDTO> GetAllCheepDTOsFromAuthor(string author)
+    public List<CheepDTO> GetAllCheepDTOsFromAuthor(string author)
     {
         return (from c in _dbContext.Cheeps
                 where c.Author.Name == author

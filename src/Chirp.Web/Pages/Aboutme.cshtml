@@ -1,0 +1,69 @@
+@page "/aboutme"
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize]
+@model Chirp.Web.AboutmeModel
+@{
+    ViewData["Title"] = "Chirp!";
+    Layout = "Shared/_Layout";
+}
+
+<div>
+    <h2>About me</h2>
+
+    <!-- All stored data about the user -->
+    <!-- Implementation taken from: https://stackoverflow.com/questions/39125347/how-to-get-claim-inside-asp-net-core-razor-view -->
+    <h3>My information</h3>
+    <div>
+        <ul>
+            <li>Name: @User.FindFirst("name")?.Value</li>
+            <li>Email: @User.FindFirst("emails")?.Value</li>
+            <li>Last login: @DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(User.FindFirst("auth_time")!.Value)).ToLocalTime()</li>
+            <li>Identity Provider: @User.FindFirst("http://schemas.microsoft.com/identity/claims/identityprovider")?.Value</li>
+        </ul>
+    </div>
+
+    <!-- A list of users that the user follows -->
+    <h3>List of the people I follow</h3>
+    <div>
+        @if (Model.FollowedAuthors.Any()) 
+        {
+        <ul>
+            @foreach (var followed in Model.FollowedAuthors)
+            {
+                <li>
+                    <a href="@followed">@followed</a>
+                </li>
+            }
+        </ul>
+        }
+        else 
+        {
+            <em>No authors followed.</em>
+        }
+    </div>
+
+    <!-- The user's cheeps -->
+    <h3>My cheeps</h3>
+    @if (Model.Cheeps.Any())
+    {
+        <ul id="messagelist" class="cheeps">
+        @foreach (var cheep in Model.Cheeps)
+        {
+            <li>
+                <div>
+                    <strong>
+                        <a href="/@cheep.Author">@cheep.Author</a>
+                    </strong>
+                </div>
+                <p>@cheep.Text</p>
+                <small>&mdash; @cheep.TimeStamp</small>
+            </li>
+        }
+        </ul>
+    }
+    else
+    {
+        <em>There are no cheeps posted.</em>
+    }
+    
+</div>
