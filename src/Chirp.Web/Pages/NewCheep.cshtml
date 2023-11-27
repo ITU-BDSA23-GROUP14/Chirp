@@ -7,7 +7,7 @@
     <div class="cheepbox">
         <h3>What's on your mind @(User.Identity.Name)?</h3>
         <form method="post">
-            <input style="float: left" type="text" asp-for="Text" asp-validation-for="Text">
+            <input style="float: left" type="text" asp-for="Text" asp-validation-for="Text" maxlength="160">
             <input type="submit" value="Share">
         </form>
     </div>

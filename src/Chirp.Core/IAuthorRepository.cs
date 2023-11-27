@@ -8,4 +8,6 @@ public interface IAuthorRepository
     public Task AddFollowing(string user, string target);
     public Task RemoveFollowing(string user, string target);
     public bool IsAuthorFollowingAuthor(string user, string target);
+    public List<string> GetFollowedAuthors(string user);
+    public Task RemoveUserData(string user);
 }

@@ -95,7 +95,7 @@ public class UnitTests : IDisposable
     public void GetCheepDTOs_returns_32_cheeps()
     {
         // Act
-        var lst = _CheepRepository.GetCheepDTOs(0);
+        var lst = _CheepRepository.GetCheepDTOsForPublicTimeline(0);
 
         // Assert
         Assert.Equal(32, lst.Count);
@@ -199,5 +199,71 @@ public class UnitTests : IDisposable
         // Assert
         var isFollowing = _AuthorRepository.IsAuthorFollowingAuthor("test", "test2");
         Assert.False(isFollowing);
+    }
+
+    public async Task AddFollowing_yourself_fails()
+    {
+        // Arrange
+        _AuthorRepository.CreateAuthor("yourself", "you@you.com");
+        
+        //Act & Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => 
+        {
+            await _AuthorRepository.AddFollowing("yourself", "yourself");
+        });
+        
+        Assert.False(_AuthorRepository.IsAuthorFollowingAuthor("yourself", "yourself"));
+    }
+
+    [Fact]
+    public async Task RemoveFollowing_on_unfollowed_nonexistent_target_fails()
+    {
+        // Arrange
+        _AuthorRepository.CreateAuthor("Hello","world@something.com");
+        
+        // Act & Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => 
+            { 
+                await _AuthorRepository.RemoveFollowing("Hello", "World");
+            });
+    }
+    
+    [Fact]
+    public async Task RemoveFollowing_nonexistent_user_on_unfollowed_target_fails()
+    {   
+        // Act & Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => 
+            {
+                await _AuthorRepository.RemoveFollowing("World", "Hello");
+            });
+    }
+
+    [Fact]
+    public async Task CreateCheep_too_long_text_fails()
+    {
+        // Arrange
+        var cheep = new CheepCreateDTO 
+        {
+            // Text length is over 160 character limit
+            Text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            Author = "Superman",
+            Email = "clark@notkent.dc"
+        };
+        
+        // Act & Assert
+        await Assert.ThrowsAsync<FluentValidation.ValidationException>(async () => 
+            {
+                await _CheepRepository.CreateCheep(cheep);
+            });
+    }
+
+    [Fact]
+    public void GetAuthorByEmail_with_nonexistent_user_returns_null()
+    {
+        // Act
+        var nonexistantUser = _AuthorRepository.GetAuthorByEmail("foo@bar.com");
+
+        // Assert
+        Assert.Null(nonexistantUser);
     }
 }

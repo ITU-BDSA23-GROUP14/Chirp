@@ -118,4 +118,29 @@ public class AuthorRepository : IAuthorRepository
 
         return _dbContext.Authors.Any(author => author.AuthorId == authorId && author.Following.Any(target => target.AuthorId == targetId));
     }
+
+    public List<string> GetFollowedAuthors(string user)
+    {
+        var author = _dbContext.Authors.Include(author => author.Following).FirstOrDefault(author => author.Name == user);
+        var following = new List<string>();
+
+        foreach(var f in author!.Following){
+            following.Add(f.Name);
+        }
+
+        return following;
+    }
+
+    public async Task RemoveUserData(string user)
+    {
+        var author = await _dbContext.Authors
+            .Include(author => author.Followers)
+            .Include(author => author.Following)
+            .Include(author => author.Cheeps)
+            .FirstOrDefaultAsync(author => author.Name == user);
+
+        _dbContext.Remove(author!);
+
+        await _dbContext.SaveChangesAsync();
+    }
 }
