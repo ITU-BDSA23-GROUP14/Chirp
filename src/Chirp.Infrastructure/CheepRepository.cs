@@ -50,22 +50,6 @@ public class CheepRepository : ICheepRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public List<CheepDTO> GetCheepDTOs(int page)
-    {
-        if (page > 0)
-        {
-            page -= 1;
-        }
-        return (from c in _dbContext.Cheeps
-                orderby c.TimeStamp descending
-                select new CheepDTO
-                {
-                    Author = c.Author.Name,
-                    Text = c.Text ?? "",
-                    TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
-                }).Skip(32 * page).Take(32).ToList();
-    }
-
     public List<CheepDTO> GetCheepDTOsFromAuthor(string author, int page)
     {
         if (page > 0)
@@ -94,6 +78,22 @@ public class CheepRepository : ICheepRepository
                     Text = c.Text ?? "",
                     TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
                 }).ToList();
+    }
+
+    public List<CheepDTO> GetCheepDTOsForPublicTimeline(int page)
+    {
+        if (page > 0)
+        {
+            page -= 1;
+        }
+        return (from c in _dbContext.Cheeps
+                orderby c.TimeStamp descending
+                select new CheepDTO
+                {
+                    Author = c.Author.Name,
+                    Text = c.Text ?? "",
+                    TimeStamp = c.TimeStamp.ToString("dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                }).Skip(32 * page).Take(32).ToList();
     }
 
     public async Task<List<CheepDTO>> GetCheepDTOsForPrivateTimeline(string author, int page)

@@ -33,7 +33,7 @@ public class PublicModel : PageModel
     public ActionResult OnGet()
     {
         int.TryParse(Request.Query["page"], out int page);
-        Cheeps = _cheepRepository.GetCheepDTOs(page);
+        Cheeps = _cheepRepository.GetCheepDTOsForPublicTimeline(page);
 
         // List of the cheep authors that the user follows
         if (User.Identity!.IsAuthenticated){
