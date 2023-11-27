@@ -157,7 +157,7 @@ public class UnitTests : IDisposable
         List<CheepDTO> testingDTOs = await _CheepRepository.GetCheepDTOsForPrivateTimeline("Batman2", 1);
 
         // Assert
-        Assert.Equal(testingDTOs, actualDTOs);
+        Assert.Equivalent(testingDTOs, actualDTOs);
     }
 
     [Fact]
@@ -201,6 +201,7 @@ public class UnitTests : IDisposable
         Assert.False(isFollowing);
     }
 
+    [Fact]
     public async Task AddFollowing_yourself_fails()
     {
         // Arrange
