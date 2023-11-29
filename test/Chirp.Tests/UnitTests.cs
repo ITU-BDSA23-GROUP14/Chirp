@@ -1,6 +1,8 @@
+using System.Runtime.InteropServices;
 using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyModel.Resolution;
 
 namespace Chirp.Tests;
 
@@ -41,8 +43,10 @@ public class UnitTests : IDisposable
     [Fact]
     public void CreateAuthor_Adds_Author_To_Database()
     {
-        // Act
+        // Arrange
         _AuthorRepository.CreateAuthor("Batman", "bruce@wayneenterprises.dc");
+
+        // Act
         var created = _context.Authors.SingleOrDefault(c => c.Name == "Batman");
 
         // Assert
@@ -131,6 +135,70 @@ public class UnitTests : IDisposable
         // Assert
         Assert.True(cheeps.Count == 32);
         Assert.True(DateTime.Parse(cheeps[0].TimeStamp) > DateTime.Parse(cheeps[1].TimeStamp));
+    }
+
+    [Fact]
+    public async Task GetCheepDTOsForPrivateTimeline_returns_newest_32_cheeps_from_following_authors()
+    {
+        // Arrange
+        _context.Authors.Add(new Author { Name = "Batman2", Email = "bruce2@wayneenterprises.dc" });
+        await _context.SaveChangesAsync();
+
+        // Act
+        await _AuthorRepository.AddFollowing("Batman2", "Jacqualine Gilcoine");
+        await _AuthorRepository.AddFollowing("Batman2", "Johnnie Calixto");
+
+        List<CheepDTO> actualDTOs = new();
+        actualDTOs.AddRange(_CheepRepository.GetCheepDTOsFromAuthor("Jacqualine Gilcoine", 1));
+        actualDTOs.AddRange(_CheepRepository.GetCheepDTOsFromAuthor("Johnnie Calixto", 1));
+
+        actualDTOs = (from a in actualDTOs orderby a.TimeStamp descending select a).Take(32).ToList();
+
+        List<CheepDTO> testingDTOs = await _CheepRepository.GetCheepDTOsForPrivateTimeline("Batman2", 1);
+
+        // Assert
+        Assert.Equivalent(testingDTOs, actualDTOs);
+    }
+
+    [Fact]
+    public async Task AddFollowing_adds_follow_to_database()
+    {
+        // Arrange
+        _AuthorRepository.CreateAuthor("Bamse", "bamse@DR.dk");
+        _AuthorRepository.CreateAuthor("Kylling", "kylling@DR.dk");
+
+        // Act
+        await _AuthorRepository.AddFollowing("Bamse", "Kylling");
+
+        // Assert
+        Assert.True(_AuthorRepository.IsAuthorFollowingAuthor("Bamse", "Kylling"));
+    }
+
+    [Fact]
+    public async Task RemoveFollowing_removes_follow_from_database()
+    {
+        // Arrange
+        _AuthorRepository.CreateAuthor("Batman3", "bruce3@wayneenterprises.dc");
+        _AuthorRepository.CreateAuthor("Flash", "henry@allen.dc");
+
+        //Act
+        await _AuthorRepository.AddFollowing("Flash", "Batman3");
+        await _AuthorRepository.RemoveFollowing("Flash", "Batman3");
+
+        //Assert
+        Assert.False(_AuthorRepository.IsAuthorFollowingAuthor("Flash", "Batman3"));
+    }
+
+    [Fact]
+    public void IsAuthorFollowingAuthorFalse()
+    {
+        // Arrange
+        _AuthorRepository.CreateAuthor("test", "test@test.com");
+        _AuthorRepository.CreateAuthor("test2", "test2@test.com");
+
+        // Assert
+        var isFollowing = _AuthorRepository.IsAuthorFollowingAuthor("test", "test2");
+        Assert.False(isFollowing);
     }
 
     [Fact]

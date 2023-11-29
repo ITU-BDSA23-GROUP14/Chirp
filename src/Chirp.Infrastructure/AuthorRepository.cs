@@ -79,7 +79,7 @@ public class AuthorRepository : IAuthorRepository
         var authorToUnfollow = _dbContext.Authors.FirstOrDefault(author => author.Name == target);
         
         var author = _dbContext.Authors
-            .Include(author => author.Following.Where(followingauthor => followingauthor.Name == authorToUnfollow!.Name))
+            .Include(author => author.Following)
             .FirstOrDefault(author => author.Name == user);
         
         if (author == null)
