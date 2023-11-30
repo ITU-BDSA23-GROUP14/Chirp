@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Chirp.Tests;
 
+// Class taken from https://danieldonbavand.com/2022/06/13/using-playwright-with-the-webapplicationfactory-to-test-a-blazor-application/
 public class E2EWebApplicationFactory<TProgram> : CustomWebApplicationFactory<TProgram> where TProgram : class
 {
     private IHost? _host;
