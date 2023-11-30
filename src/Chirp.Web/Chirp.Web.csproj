@@ -24,8 +24,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.13" NoWarn="NU1605" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="2.15.5" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.15.3" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="2.16.0" />
+    <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.16.0" />
   </ItemGroup>
 
 </Project>
