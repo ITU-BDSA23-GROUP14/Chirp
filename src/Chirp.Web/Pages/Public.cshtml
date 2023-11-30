@@ -13,39 +13,56 @@
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
-        @foreach (var cheep in Model.Cheeps)
-        {
-            <li>
-                <div>
-                    <strong>
-                        <a href="/@cheep.Author">@cheep.Author</a>
-                    </strong>
-                    @if (User.Identity!.IsAuthenticated && cheep.Author != User.Identity.Name)
-                    {
-                        if (Model.FollowedAuthors.Contains(cheep.Author))
+            @foreach (var cheep in Model.Cheeps)
+            {
+                <li>
+                    <div>
+                        <strong>
+                            <a href="/@cheep.Author">@cheep.Author</a>
+                        </strong>
+                        @if (User.Identity!.IsAuthenticated && cheep.Author != User.Identity.Name)
                         {
-                            <form method="post" asp-page-handler="Unfollow" style="display: inline;">
-                                <input type="hidden" name="authorToUnfollow" value="@cheep.Author" />
-                                <button type="submit">Unfollow</button>
-                            </form>
+                            if (Model.FollowedAuthors.Contains(cheep.Author))
+                            {
+                                <form method="post" asp-page-handler="Unfollow" style="display: inline;">
+                                    <input type="hidden" name="authorToUnfollow" value="@cheep.Author" />
+                                    <button type="submit">Unfollow</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" asp-page-handler="Follow" style="display: inline;">
+                                    <input type="hidden" name="authorToFollow" value="@cheep.Author" />
+                                    <button type="submit">Follow</button>
+                                </form>
+                            }
                         }
-                        else
-                        {
-                            <form method="post" asp-page-handler="Follow" style="display: inline;">
-                                <input type="hidden" name="authorToFollow" value="@cheep.Author" />
-                                <button type="submit">Follow</button>
-                            </form>
-                        }
-                    }
-                </div>
-                <p style="word-wrap: break-word;">@cheep.Text</p> 
-                <small>&mdash; @cheep.TimeStamp</small>
-            </li>
-        }
+                    </div>
+                    <p style="word-wrap: break-word;">@cheep.Text</p>
+                    <small>&mdash; @cheep.TimeStamp</small>
+                </li>
+            }
+
+            @if (Model.CurrentPage > 1)
+            {
+                <a href="?page=@(Model.CurrentPage - 1)" style="margin-right: 20px;">Previous Page</a>
+            }
+
+            @if (Model.CurrentPage == 0)
+            {
+                <a href="?page=@(Model.CurrentPage + 2)">Next Page</a>
+            }
+            else if (Model.HasNextPage)
+            {
+                <a href="?page=@(Model.CurrentPage + 1)">Next Page</a>
+            }
+
+
         </ul>
     }
     else
     {
         <em>There are no cheeps so far.</em>
     }
+
 </div>
