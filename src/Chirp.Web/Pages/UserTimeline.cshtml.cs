@@ -32,9 +32,17 @@ public class UserTimelineModel : PageModel
         if (User.Identity!.Name == author)
         {
             int.TryParse(Request.Query["page"], out int page);
-            CurrentPage = page;
+            if (page == 0)
+            {
+                CurrentPage = 1;
+            }
+            else
+            {
+                CurrentPage = page;
+            }
             Cheeps = await _cheepRepository.GetCheepDTOsForPrivateTimeline(author, page);
-            if (_cheepRepository.GetCheepDTOsForPublicTimeline(page + 1).Count() > 0)
+            var cheepsOnNextPage = await _cheepRepository.GetCheepDTOsForPrivateTimeline(author, CurrentPage + 1);
+            if (cheepsOnNextPage.Count() > 0)
             {
                 HasNextPage = true;
             }
@@ -53,14 +61,29 @@ public class UserTimelineModel : PageModel
                     }
                 }
             }
-
             return Page();
         }
 
         else
         {
             int.TryParse(Request.Query["page"], out int page);
+            if (page == 0)
+            {
+                CurrentPage = 1;
+            }
+            else
+            {
+                CurrentPage = page;
+            }
             Cheeps = _cheepRepository.GetCheepDTOsFromAuthor(author, page);
+            if (_cheepRepository.GetCheepDTOsFromAuthor(author, CurrentPage + 1).Count() > 0)
+            {
+                HasNextPage = true;
+            }
+            else
+            {
+                HasNextPage = false;
+            }
 
             if (User.Identity!.IsAuthenticated)
             {

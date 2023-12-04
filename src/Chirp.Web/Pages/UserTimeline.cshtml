@@ -51,13 +51,16 @@
                 <a href="?page=@(Model.CurrentPage - 1)" style="margin-right: 20px;">Previous Page</a>
             }
 
-            @if (Model.CurrentPage == 0)
+            @if (Model.HasNextPage)
             {
-                <a href="?page=@(Model.CurrentPage + 2)">Next Page</a>
-            }
-            else if (Model.HasNextPage)
-            {
-                <a href="?page=@(Model.CurrentPage + 1)">Next Page</a>
+                if (Model.CurrentPage == 0)
+                {
+                    <a href="?page=@(Model.CurrentPage + 2)">Next Page</a>
+                }
+                else
+                {
+                    <a href="?page=@(Model.CurrentPage + 1)">Next Page</a>
+                }
             }
 
         </ul>
