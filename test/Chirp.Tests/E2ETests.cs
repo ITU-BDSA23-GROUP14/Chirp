@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using NUnit.Framework;
@@ -23,12 +22,10 @@ public class E2ETests : PageTest
         await Page.GotoAsync(_serverAddress);
     }
 
-    [TearDown]
-    public async Task TearDown()
+    [OneTimeTearDown]
+    public async Task OneTimeTearDown()
     {
-        await Page.GotoAsync(_serverAddress);
-        var firstCheep = Page.GetByRole(AriaRole.Listitem).First;
-        await firstCheep.GetByRole(AriaRole.Button).First.ClickAsync();
+        await _fixture.DisposeAsync();
     }
 
     [Test]
@@ -41,6 +38,7 @@ public class E2ETests : PageTest
             .GetByRole(AriaRole.Button, new() { Name = "Unfollow" })
             .First)
             .ToBeVisibleAsync();
+        await firstCheep.GetByRole(AriaRole.Button).First.ClickAsync();
     }
 
     [Test]
@@ -52,5 +50,14 @@ public class E2ETests : PageTest
 
         await Expect(Page.GetByText("Jacqualine Gilcoine").First).ToBeVisibleAsync();
         await Expect(Page.GetByText("Starbuck now is what we hear the worst.").First).ToBeVisibleAsync();
+        await firstCheep.GetByRole(AriaRole.Button).First.ClickAsync();
+    }
+
+    [Test]
+    public async Task DefaultImageIsAdded()
+    {
+        var firstCheep = Page.GetByRole(AriaRole.Listitem).First;
+
+        await Expect(firstCheep.GetByRole(AriaRole.Img).First).ToHaveAttributeAsync("src", "/images/icon1.png");
     }
 }
