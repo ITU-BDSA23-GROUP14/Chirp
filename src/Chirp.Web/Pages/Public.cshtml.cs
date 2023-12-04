@@ -11,6 +11,8 @@ public class PublicModel : PageModel
     public List<CheepDTO> Cheeps { get; set; }
     public List<string> FollowedAuthors { get; set; }
     private readonly HttpClient client;
+    public bool HasNextPage { get; set; }
+    public int CurrentPage { get; set; }
 
     public PublicModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
@@ -35,27 +37,38 @@ public class PublicModel : PageModel
     public ActionResult OnGet()
     {
         int.TryParse(Request.Query["page"], out int page);
+        CurrentPage = page;
         Cheeps = _cheepRepository.GetCheepDTOsForPublicTimeline(page);
+        if (_cheepRepository.GetCheepDTOsForPublicTimeline(page + 1).Count() > 0)
+        {
+            HasNextPage = true;
+        }
+        else
+        {
+            HasNextPage = false;
+        }
 
         // List of the cheep authors that the user follows
-        if (User.Identity!.IsAuthenticated){
+        if (User.Identity!.IsAuthenticated)
+        {
             string name = User.Identity!.Name!;
-            if (_authorRepository.GetAuthorByName(name) == null) {
+            if (_authorRepository.GetAuthorByName(name) == null)
+            {
                 string email = User.Claims.FirstOrDefault(c => c.Type == "emails")!.Value;
-                _authorRepository.CreateAuthor(name, email);    
+                _authorRepository.CreateAuthor(name, email);
             }
 
             foreach (var c in Cheeps)
-            {   
-                if (_authorRepository.IsAuthorFollowingAuthor(name, c.Author)) 
+            {
+                if (_authorRepository.IsAuthorFollowingAuthor(name, c.Author))
                 {
-                    FollowedAuthors.Add(c.Author); 
+                    FollowedAuthors.Add(c.Author);
                 }
             }
         }
-        
+
         return Page();
-    } 
+    }
 
     public async Task<IActionResult> OnPostFollow(string authorToFollow)
     {

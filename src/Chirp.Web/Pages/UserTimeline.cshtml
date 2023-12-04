@@ -58,6 +58,24 @@
                     </div>
                 </li>
             }
+
+            @if (Model.CurrentPage > 1)
+            {
+                <a href="?page=@(Model.CurrentPage - 1)" style="margin-right: 20px;">Previous Page</a>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                if (Model.CurrentPage == 0)
+                {
+                    <a href="?page=@(Model.CurrentPage + 2)">Next Page</a>
+                }
+                else
+                {
+                    <a href="?page=@(Model.CurrentPage + 1)">Next Page</a>
+                }
+            }
+
         </ul>
     }
     else
