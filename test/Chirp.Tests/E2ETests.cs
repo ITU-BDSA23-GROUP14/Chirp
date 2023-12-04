@@ -54,6 +54,13 @@ public class E2ETests : PageTest
     }
 
     [Test]
+    public async Task DefaultImageIsAdded()
+    {
+        var firstCheep = Page.GetByRole(AriaRole.Listitem).First;
+
+        await Expect(firstCheep.GetByRole(AriaRole.Img).First).ToHaveAttributeAsync("src", "/images/icon1.png");
+    }
+    
     public async Task PublicTimelineNextPageGoesToNextPageAndPreviousPageGoesToPreviousPage()
     {
         await Page.Locator("body").ClickAsync();

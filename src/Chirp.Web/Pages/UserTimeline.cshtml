@@ -5,11 +5,17 @@
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    var routeName = HttpContext.GetRouteValue("author");
+    var routeName = HttpContext.GetRouteValue("author") as string;
+    var imagePath = await Model.GetGithubPictureURL(routeName!);
 }
 
 <div>
-    <h2> @routeName's Timeline </h2>
+    <div style="text-align: center;">
+        <h2>@routeName's Timeline</h2>
+        <!-- Image implementation based on: https://learn.microsoft.com/en-us/aspnet/web-pages/overview/ui-layouts-and-themes/9-working-with-images -->
+        <img src="@imagePath" alt="Sample Photo" width="96" height="96"
+            style="border-radius: 50%; display: block; margin: auto;" />
+    </div>
 
     <partial name="NewCheep.cshtml" model="null" />
 
@@ -19,30 +25,37 @@
             @foreach (var cheep in Model.Cheeps)
             {
                 <li>
-                    <div>
-                        <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
-                        </strong>
-                        @if (User.Identity!.IsAuthenticated && cheep.Author != User.Identity.Name)
-                        {
-                            if (Model.FollowedAuthors.Contains(cheep.Author))
+                    <div style="width: 100%; display: flex;">
+                        <div style="width: 10%;">
+                            <img src="@await Model.GetGithubPictureURL(cheep.Author)" alt="Sample Photo" width="50" height="50"
+                                style="border-radius: 50%; display: block; padding: 0 0 0 0" />
+                        </div>
+
+                        <div style="width: 90%;">
+                            <strong>
+                                <a href="/@cheep.Author padding-left: 5">@cheep.Author</a>
+                            </strong>
+                            @if (User.Identity!.IsAuthenticated && cheep.Author != User.Identity.Name)
                             {
-                                <form method="post" asp-page-handler="Unfollow" style="display: inline;">
-                                    <input type="hidden" name="authorToUnfollow" value="@cheep.Author" />
-                                    <button type="submit">Unfollow</button>
-                                </form>
+                                if (Model.FollowedAuthors.Contains(cheep.Author))
+                                {
+                                    <form method="post" asp-page-handler="Unfollow" style="display: inline;">
+                                        <input type="hidden" name="authorToUnfollow" value="@cheep.Author" />
+                                        <button type="submit">Unfollow</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-page-handler="Follow" style="display: inline;">
+                                        <input type="hidden" name="authorToFollow" value="@cheep.Author" />
+                                        <button type="submit">Follow</button>
+                                    </form>
+                                }
                             }
-                            else
-                            {
-                                <form method="post" asp-page-handler="Follow" style="display: inline;">
-                                    <input type="hidden" name="authorToFollow" value="@cheep.Author" />
-                                    <button type="submit">Follow</button>
-                                </form>
-                            }
-                        }
+                            <p style="word-wrap: break-word;">@cheep.Text</p>
+                            <small>&mdash; @cheep.TimeStamp</small>
+                        </div>
                     </div>
-                    <p style="word-wrap: break-word;">@cheep.Text</p>
-                    <small>&mdash; @cheep.TimeStamp</small>
                 </li>
             }
 

@@ -10,6 +10,7 @@ public class UserTimelineModel : PageModel
     private readonly IAuthorRepository _authorRepository;
     public List<CheepDTO> Cheeps { get; set; }
     public List<string> FollowedAuthors { get; set; }
+    private readonly HttpClient client;
     public bool HasNextPage { get; set; }
     public int CurrentPage { get; set; }
 
@@ -19,6 +20,7 @@ public class UserTimelineModel : PageModel
         FollowedAuthors = new();
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
+        client = new HttpClient();
     }
 
     public async Task<IActionResult> OnGet(string author)
@@ -124,4 +126,34 @@ public class UserTimelineModel : PageModel
         await _authorRepository.RemoveFollowing(currentUser, authorToUnfollow);
         return RedirectToPage();
     }
+
+    public async Task<string> GetGithubPictureURL(string author)
+    {
+        if (string.IsNullOrWhiteSpace(author))
+        {
+            return "/images/icon1.png"; // Default image for null or empty author
+        }
+
+        var githubUserUrl = $"https://github.com/{author}.png";
+
+        try
+        {
+            var response = await client.GetAsync(githubUserUrl);
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (content.Contains("Not Found")) {
+                return "/images/icon1.png";
+            }
+            else
+            {
+                return $"https://github.com/{author}.png";
+            }
+        }
+        catch (Exception)
+        {
+            // Log the exception (ex.Message) or handle it as needed
+            return "/images/icon1.png"; // Fallback image in case of an exception
+        }
+    }
+
 }
