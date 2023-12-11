@@ -1,1 +1,15 @@
 /' https://plantuml.com/deployment-diagram '/
+@startuml deployment-diagram
+
+cloud Azure {
+    node "Web server" as WebServer <<device>> {
+        artifact Website <<artifact>>
+    }
+    node "SQL Server" as DbServer <<device>> {
+        database "SQL database" as AzureDB <<artifact>>
+    }
+    WebServer -- DbServer
+}
+node Client <<device>>
+Client - Azure : HTTP
+@enduml

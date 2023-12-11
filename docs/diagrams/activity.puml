@@ -1,20 +1,14 @@
-@startuml
+@startuml activity-diagram1
 start
 
 :Display public timeline (not logged in);
 
 repeat: Login with Github;
-
-if (Succesful?) then (yes)
-    :Display public timeline (logged in);
-    --> [Go to private timeline] :Display Private timeline;
-    -right-> [Type cheep] :Type cheep;
-else (no)
-    :Display Github error message;
-    repeat while (Try again)
-
-    -> :Login with Github;
-endif
-
+backward: Display error message;
+repeat while (Succesful?) is (No) not (Yes)
+:Display public timeline (logged in);
+:Type cheep;
+:Share;
+:Redirect to private timeline;
 stop
 @enduml
