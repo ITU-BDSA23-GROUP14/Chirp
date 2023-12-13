@@ -1,8 +1,7 @@
-using System.Runtime.InteropServices;
 using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyModel.Resolution;
+using Xunit;
 
 namespace Chirp.Tests;
 
@@ -206,13 +205,13 @@ public class UnitTests : IDisposable
     {
         // Arrange
         _AuthorRepository.CreateAuthor("yourself", "you@you.com");
-        
+
         //Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => 
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
         {
             await _AuthorRepository.AddFollowing("yourself", "yourself");
         });
-        
+
         Assert.False(_AuthorRepository.IsAuthorFollowingAuthor("yourself", "yourself"));
     }
 
@@ -220,20 +219,20 @@ public class UnitTests : IDisposable
     public async Task RemoveFollowing_on_unfollowed_nonexistent_target_fails()
     {
         // Arrange
-        _AuthorRepository.CreateAuthor("Hello","world@something.com");
-        
+        _AuthorRepository.CreateAuthor("Hello", "world@something.com");
+
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => 
-            { 
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            {
                 await _AuthorRepository.RemoveFollowing("Hello", "World");
             });
     }
-    
+
     [Fact]
     public async Task RemoveFollowing_nonexistent_user_on_unfollowed_target_fails()
-    {   
+    {
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => 
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
                 await _AuthorRepository.RemoveFollowing("World", "Hello");
             });
@@ -243,16 +242,16 @@ public class UnitTests : IDisposable
     public async Task CreateCheep_too_long_text_fails()
     {
         // Arrange
-        var cheep = new CheepCreateDTO 
+        var cheep = new CheepCreateDTO
         {
             // Text length is over 160 character limit
             Text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             Author = "Superman",
             Email = "clark@notkent.dc"
         };
-        
+
         // Act & Assert
-        await Assert.ThrowsAsync<FluentValidation.ValidationException>(async () => 
+        await Assert.ThrowsAsync<FluentValidation.ValidationException>(async () =>
             {
                 await _CheepRepository.CreateCheep(cheep);
             });

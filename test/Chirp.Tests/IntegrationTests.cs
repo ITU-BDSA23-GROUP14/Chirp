@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net.Http.Headers;
+using Xunit;
 
 namespace Chirp.Tests;
 
