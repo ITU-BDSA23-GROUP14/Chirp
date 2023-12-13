@@ -19,6 +19,7 @@ public class E2ETests : PageTest
     [SetUp]
     public async Task SetUp()
     {
+        await _fixture.CreateClient().GetAsync("/"); // wait for the server to start up
         await Page.GotoAsync(_serverAddress);
     }
 
@@ -60,7 +61,7 @@ public class E2ETests : PageTest
 
         await Expect(firstCheep.GetByRole(AriaRole.Img).First).ToHaveAttributeAsync("src", "/images/icon1.png");
     }
-    
+
     [Test]
     public async Task PublicTimelineNextPageGoesToNextPageAndPreviousPageGoesToPreviousPage()
     {
