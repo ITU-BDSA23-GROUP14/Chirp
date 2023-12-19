@@ -1,0 +1,10 @@
+@startuml activity-diagram2
+start
+:Display public timeline (logged in);
+:Follow;
+:Click about me;
+:Click forget me;
+:Display signed out page;
+:Display public timeline (not logged in);
+stop
+@enduml
