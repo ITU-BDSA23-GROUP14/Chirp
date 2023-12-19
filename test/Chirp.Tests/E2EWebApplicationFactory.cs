@@ -1,24 +1,69 @@
+using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Chirp.Tests;
 
 // Class taken from https://danieldonbavand.com/2022/06/13/using-playwright-with-the-webapplicationfactory-to-test-a-blazor-application/
-public class E2EWebApplicationFactory<TProgram> : CustomWebApplicationFactory<TProgram> where TProgram : class
+public class E2EWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
 {
     private IHost? _host;
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
+        // Same configuration as for integration tests, but done after first build so config isn't run twice
+        builder.ConfigureServices(services =>
+        {
+            var dbContextDescriptor = services.SingleOrDefault(
+                d => d.ServiceType ==
+                    typeof(DbContextOptions<ChirpDBContext>));
+
+            if (dbContextDescriptor != null)
+            {
+                services.Remove(dbContextDescriptor);
+            }
+
+            services.AddDbContext<ChirpDBContext>(options =>
+            {
+                options.UseInMemoryDatabase(databaseName: "E2ETestsDB1");
+            });
+
+            services.AddAuthentication(defaultScheme: "TestScheme")
+                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                        "TestScheme", options => { });
+        });
+
         // Create the host for TestServer now before we  
         // modify the builder to use Kestrel instead.    
         var testHost = builder.Build();
 
+        builder.ConfigureServices(services =>
+        {
+            var dbContextDescriptor = services.SingleOrDefault(
+                d => d.ServiceType ==
+                    typeof(DbContextOptions<ChirpDBContext>));
+
+            if (dbContextDescriptor != null)
+            {
+                services.Remove(dbContextDescriptor);
+            }
+
+            services.AddDbContext<ChirpDBContext>(options =>
+            {
+                options.UseInMemoryDatabase(databaseName: "E2ETestsDB2");
+            });
+        });
+
         // Modify the host builder to use Kestrel instead  
         // of TestServer so we can listen on a real address.    
+
+        builder.UseEnvironment("Development");
 
         builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
 
