@@ -35,7 +35,7 @@ Markus Æbelø Faurbjerg - mfau@itu.dk \
 Niklas Aaron Sherman Andersen - naaa@itu.dk \
 Dagrún Eir Ásgeirsdóttir - daas@itu.dk \
 Ida Barkou Vilstrup - idavilstrup@gmail.com \
-Jonas Fuhr Høyer - jfho@itu.dk
+Jonas Fuhr Høyer - jfho@itu.dk \
 Nicholas Hansen - nicha@itu.dk
 
 # Issue formatting
