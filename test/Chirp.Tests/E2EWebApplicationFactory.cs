@@ -17,13 +17,6 @@ public class E2EWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        // Create the host for TestServer now before we  
-        // modify the builder to use Kestrel instead.    
-        var testHost = builder.Build();
-
-        // Modify the host builder to use Kestrel instead  
-        // of TestServer so we can listen on a real address.    
-
         // Same configuration as for integration tests, but done after first build so config isn't run twice
         builder.ConfigureServices(services =>
         {
@@ -38,13 +31,37 @@ public class E2EWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram
 
             services.AddDbContext<ChirpDBContext>(options =>
             {
-                options.UseInMemoryDatabase(databaseName: "DBMemoryE2E");
+                options.UseInMemoryDatabase(databaseName: "E2ETestsDB1");
             });
 
             services.AddAuthentication(defaultScheme: "TestScheme")
                     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
                         "TestScheme", options => { });
         });
+
+        // Create the host for TestServer now before we  
+        // modify the builder to use Kestrel instead.    
+        var testHost = builder.Build();
+
+        builder.ConfigureServices(services =>
+        {
+            var dbContextDescriptor = services.SingleOrDefault(
+                d => d.ServiceType ==
+                    typeof(DbContextOptions<ChirpDBContext>));
+
+            if (dbContextDescriptor != null)
+            {
+                services.Remove(dbContextDescriptor);
+            }
+
+            services.AddDbContext<ChirpDBContext>(options =>
+            {
+                options.UseInMemoryDatabase(databaseName: "E2ETestsDB2");
+            });
+        });
+
+        // Modify the host builder to use Kestrel instead  
+        // of TestServer so we can listen on a real address.    
 
         builder.UseEnvironment("Development");
 
