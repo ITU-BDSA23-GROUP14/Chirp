@@ -61,6 +61,7 @@ public class E2ETests : PageTest
         await Expect(firstCheep.GetByRole(AriaRole.Img).First).ToHaveAttributeAsync("src", "/images/icon1.png");
     }
     
+    [Test]
     public async Task PublicTimelineNextPageGoesToNextPageAndPreviousPageGoesToPreviousPage()
     {
         await Page.Locator("body").ClickAsync();
