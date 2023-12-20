@@ -1,20 +1,79 @@
 /' https://plantuml.com/class-diagram '/
 @startuml domainModel
-interface IAuthorRepository
-interface ICheepRepository
-class AuthorRepository
-class CheepRepository
-class Author
-class Cheep
-class ChirpDBContext
+interface IAuthorRepository {
+    + GetAuthorByName(name : string) : AuthorDTO? 
+    + GetAuthorByEmail(email : string) : AuthorDTO?
+    + CreateAuthor(name : string, email : string)
+    + AddFollowing(user : string, target : string) : Task
+    + RemoveFollowing(user : string, target : string) : Task
+    + IsAuthorFollowingAuthor(user : string, target : string) : bool
+    + GetFollowedAuthors(user : string) : List<string>
+    + RemoveUserData(user : string) : Task
+}
+interface ICheepRepository {
+    + CreateCheep(cheepCreate : CheepCreateDTO) : Task
+    + GetCheepDTOsForPublicTimeline(page : int) : List<CheepDTO>
+    + GetCheepDTOsFromAuthor(author : string, page : int) : List<CheepDTO>
+    + GetCheepDTOsForPrivateTimeline(author : string, page : int) : Task<List<CheepDTO>>
+    + GetAllCheepDTOsFromAuthor(author : string) : List<CheepDTO>
+}
+class AuthorRepository {
+    - _dbContext : ChirpDBContext {readOnly}
+    + <<create>> AuthorRepository(dbContext : ChirpDBContext)
+}
+
+class CheepRepository  {
+    - _dbContext : ChirpDBContext {readonly}
+    - _validator : IValidator<CheepCreateDTO> {readonly}
+    + <<create>> CheepRepository(dbContext : ChirpDBContext, validator : IValidator<CheepCreateDTO>)
+}
+
+class "<<entity>> Author" {
+    + AuthorId : int
+    + Name : string
+    + Email : string
+}
+
+class "<<entity>> Cheep"{
+    + CheepId : int
+    + authorId : int
+    + Text : string?
+    + TimeStamp : DateTime
+}
+
+class AuthorDTO {
+    + Name : string {get; set; required}
+}
+
+class CheepDTO {
+    + Author : string {get; set; required}
+    + Text : string {get; set; required}
+    + TimeStamp : string {get; set; required}
+}
+
+class CheepCreateDTO {
+    + Text : string {get; set; required}
+    + Author : string {get; set; required}
+    + Email : string {get; set; required}
+}
+
+class ChirpDBContext {
+    + Authors : DbSet<Author>
+    + Cheeps : DbSet<Cheep>
+    + <<create>> ChirpDBContext(options : DbContextOptions<ChirpDBContext>)
+    + OnModelCreating(modelBuilder : ModelBuilder)
+}
 
 IAuthorRepository <|.. AuthorRepository
 ICheepRepository <|.. CheepRepository
-Author "1" -- "0..*" Cheep
-Author "0..*" -- "0..*" Author
-ChirpDBContext -- Author
-ChirpDBContext -- Cheep
-AuthorRepository o-- ChirpDBContext
-CheepRepository o-- ChirpDBContext
+"<<entity>> Author" "1 Author" -- "0..* Cheeps" "<<entity>> Cheep"
+"<<entity>> Author" "0..* Followers" -- "0..* Following" "<<entity>> Author"
+ChirpDBContext -- "<<entity>> Author"
+ChirpDBContext -- "<<entity>> Cheep"
+AuthorRepository --* ChirpDBContext
+CheepRepository --* ChirpDBContext
+IAuthorRepository ..> AuthorDTO : <<use>>
+ICheepRepository ..> CheepDTO : <<use>>
+ICheepRepository ..> CheepCreateDTO : <<use>>
 
 @enduml

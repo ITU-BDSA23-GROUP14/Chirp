@@ -2,14 +2,16 @@
 @startuml deployment-diagram
 
 cloud Azure {
-    node "Web server" as WebServer <<device>> {
+    node Server <<web server>> {
         artifact Website <<artifact>>
     }
-    node "SQL Server" as DbServer <<device>> {
+    node "SQL Server" as DbServer <<db server>> {
         database "SQL database" as AzureDB <<artifact>>
     }
-    WebServer -- DbServer
+    Server -- DbServer : Connection string
 }
-node Client <<device>>
-Client - Azure : HTTP
+node "Client computer" as Client <<computer>> {
+    node "Client browser" as Browser <<web browser>>
+}
+Browser - Server : "    HTTP <<protocol>>          " 
 @enduml

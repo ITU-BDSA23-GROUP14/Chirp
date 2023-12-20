@@ -40,6 +40,11 @@ deactivate AuthorRepository
 
 Public.cshtml -> GitHub: GET https://github.com/{author}.png
 activate GitHub
+GitHub --> Public.cshtml: HTTP Response 302
+deactivate GitHub
+
+Public.cshtml -> GitHub: GET https://avatars.githubusercontent.com/u/{id}
+activate GitHub
 GitHub --> Public.cshtml: HTTP Response 200
 deactivate GitHub
 
@@ -57,4 +62,15 @@ Client -> Chirp: GET /images/icon1.png
 activate Chirp
 Chirp --> Client: HTTP Response 200
 deactivate Chirp
+
+Client -> GitHub: GET https://github.com/{author}.png
+activate GitHub
+GitHub --> Client: HTTP Response 302
+deactivate GitHub
+
+Client -> GitHub: GET https://avatars.githubusercontent.com/u/{id}
+activate GitHub
+GitHub --> Client: HTTP Response 200
+deactivate GitHub
+
 @enduml
