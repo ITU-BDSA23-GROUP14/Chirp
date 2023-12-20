@@ -4,18 +4,10 @@ start
 :Create pull request;
 |#pink|Workflows|
 group build_and_test.yml
-  split
-    group build
-      :Run dotnet build;
-      :Run dotnet publish;
-      :Upload artifact for deployment job;
-    end group
-  split again
-    group test
-      :Run dotnet build;
-      :Run dotnet test;
-    end group
-  end split
+  group test
+    :Run dotnet build;
+    :Run dotnet test without E2E tests;
+  end group
 end group
 |Developer|
 :Approve and merge pull request;
@@ -39,7 +31,7 @@ end group
 group publish_chirp.yml
   group build-and-publish
     :Run dotnet build;
-    :Run dotnet test;
+    :Run dotnet test without E2E tests;
     :Build for Windows;
     :Build for Linux;
     :Build for Mac;
