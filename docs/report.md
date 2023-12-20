@@ -5,7 +5,7 @@ author:
   - "Dagrún Eir Ásgeirsdóttir <daas@itu.dk>"
   - "Markus Æbelø Faurbjerg <mfau@itu.dk>"
   - "Jonas Fuhr Høyer <jfho@itu.dk>"
-  - "Ida Barkou Vilstrup <idavilstrup@gmail.com>"
+  - "Ida Barkou Vilstrup <ivil@itu.dk>"
   - "Niklas Aaron Sherman Andersen <naaa@itu.dk>"
   - "Nicholas Hansen <nicha@itu.dk>"
 numbersections: true
