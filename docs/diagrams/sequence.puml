@@ -1,0 +1,76 @@
+/' https://plantuml.com/sequence-diagram '/
+@startuml sequence-diagram
+participant Client
+participant Chirp
+participant Public.cshtml
+participant CheepRepository
+participant AuthorRepository
+
+Client -> Chirp: GET /
+
+activate Chirp
+Chirp -> Public.cshtml: Route to razor page
+activate Public.cshtml
+
+Public.cshtml -> CheepRepository: GetCheepDTOsForPublicTimeline(page)
+activate CheepRepository
+CheepRepository -> EFCore: LINQ query
+activate EFCore
+EFCore -> AzureDB: SQL query
+activate AzureDB
+AzureDB --> EFCore: SQL rows
+deactivate AzureDB
+EFCore --> CheepRepository: List<CheepDTO>
+deactivate EFCore
+CheepRepository --> Public.cshtml: List<CheepDTO>
+deactivate CheepRepository
+
+Public.cshtml -> AuthorRepository: IsAuthorFollowingAuthor(author, cheepAuthor)
+activate AuthorRepository
+AuthorRepository -> EFCore: LINQ query
+activate EFCore
+EFCore -> AzureDB: SQL query
+activate AzureDB
+AzureDB --> EFCore: SQL rows
+deactivate AzureDB
+EFCore --> AuthorRepository: True or False
+deactivate EFCore
+AuthorRepository --> Public.cshtml: True or False
+deactivate AuthorRepository
+
+Public.cshtml -> GitHub: GET https://github.com/{author}.png
+activate GitHub
+GitHub --> Public.cshtml: HTTP Response 302
+deactivate GitHub
+
+Public.cshtml -> GitHub: GET https://avatars.githubusercontent.com/u/{id}
+activate GitHub
+GitHub --> Public.cshtml: HTTP Response 200
+deactivate GitHub
+
+Public.cshtml --> Chirp: Filled html page
+deactivate Public.cshtml
+Chirp --> Client: HTTP Response 200
+deactivate Chirp
+
+Client -> Chirp: GET /css/style.css
+activate Chirp
+Chirp --> Client: HTTP Response 200
+deactivate Chirp
+
+Client -> Chirp: GET /images/icon1.png
+activate Chirp
+Chirp --> Client: HTTP Response 200
+deactivate Chirp
+
+Client -> GitHub: GET https://github.com/{author}.png
+activate GitHub
+GitHub --> Client: HTTP Response 302
+deactivate GitHub
+
+Client -> GitHub: GET https://avatars.githubusercontent.com/u/{id}
+activate GitHub
+GitHub --> Client: HTTP Response 200
+deactivate GitHub
+
+@enduml

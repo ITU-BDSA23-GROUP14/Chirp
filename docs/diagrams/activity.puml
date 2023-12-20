@@ -1,0 +1,14 @@
+@startuml activity-diagram1
+start
+
+:Display public timeline (not logged in);
+
+repeat: Login with Github;
+backward: Display error message;
+repeat while (Succesful?) is (No) not (Yes)
+:Display public timeline (logged in);
+:Type cheep;
+:Share;
+:Redirect to private timeline;
+stop
+@enduml

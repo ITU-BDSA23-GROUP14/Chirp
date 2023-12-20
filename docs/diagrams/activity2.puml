@@ -1,0 +1,18 @@
+@startuml activity-diagram2
+start
+:Display public timeline (logged in);
+:Click private timeline;
+while (Follows other users?) is (yes)
+    : Show private timeline with cheeps from the user and followed users;
+    : Click unfollow;
+endwhile (no)
+:Show private timeline with only user's cheeps;
+:Click public timeline;
+:Follow user;
+:Follow user turns to unfollow;
+:Click about me;
+:Click forget me;
+:Display signed out page;
+:Display public timeline (not logged in);
+stop
+@enduml

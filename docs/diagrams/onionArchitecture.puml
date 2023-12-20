@@ -1,0 +1,43 @@
+/' https://plantuml.com/component-diagram '/
+@startuml Onion Architecture
+
+skinparam package {
+  backgroundColor<<Domain>> IndianRed
+  backgroundColor<<Infrastructure>> MediumSpringGreen
+  backgroundColor<<Presentation>> SkyBlue
+  backgroundColor<<Data Source>> CornflowerBlue
+  backgroundColor<<Third Party Services>> DimGray
+  borderColor orange
+}
+skinparam componentStyle rectangle
+package "Application Core Project" as DomainLayer <<Domain>> {
+    [CheepCreateDTO] #LightCoral
+    [CheepCreateValidator] #LightCoral
+    [CheepDTO] #LightCoral
+    [AuthorDTO] #LightCoral
+    [IAuthorRepository] #LightCoral
+    [ICheepRepository] #LightCoral
+}
+package "ASP.NET Core Web App"  as PresentationLayer <<Presentation>> {
+    [AboutMe] #LightSkyBlue
+    [Public] #LightSkyBlue
+    [UserTimeline] #LightSkyBlue
+}
+package "Data Sources" as DataSources <<Data Source>> {
+    [SQL Database] #RoyalBlue
+}
+package "Third Party Services" as ThirdPartyServices <<Third Party Services>> {
+    [Github API] #LightGray
+}
+
+package "Infrastructure Project" as InfrastructureLayer <<Infrastructure>> {
+    [Author] #LightGreen
+    [AuthorRepository] #LightGreen
+    [Cheep] #LightGreen
+    [CheepRepository] #LightGreen
+    [ChripContext] #LightGreen
+    [DbInitilizer] #LightGreen
+}
+
+
+@enduml

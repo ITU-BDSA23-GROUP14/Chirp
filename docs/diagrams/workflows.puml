@@ -1,0 +1,43 @@
+@startuml workflow-diagram
+|#LightBlue|Developer|
+start
+:Create pull request;
+|#pink|Workflows|
+group build_and_test.yml
+  group test
+    :Run dotnet build;
+    :Run dotnet test without E2E tests;
+  end group
+end group
+|Developer|
+:Approve and merge pull request;
+|Workflows|
+group deploy.yml
+  group build
+    :Setup .NET;
+    :Run dotnet build;
+    :Run dotnet publish;
+    :Upload artifact for deployment job;
+  end group
+
+  group deploy
+    :Download artifact from build job;
+    :Deploy to Azure Web App;
+  end group
+end group
+|Developer|
+:Create tag with version number;
+|Workflows|
+group publish_chirp.yml
+  group build-and-publish
+    :Run dotnet build;
+    :Run dotnet test without E2E tests;
+    :Build for Windows;
+    :Build for Linux;
+    :Build for Mac;
+    :Create GitHub Release;
+  end group
+end group
+stop
+
+@enduml
